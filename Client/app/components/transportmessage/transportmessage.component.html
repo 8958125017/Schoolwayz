@@ -1,0 +1,116 @@
+﻿<div class="card card-w-title">
+     <p-toolbar >
+        <div class="ui-toolbar-group-left">
+            <button type="button" pButton icon="fa-inbox" style="float:left" (click)="addMessage()" label="Add" pTooltip="Add Message" tooltipPosition="top"></button>
+        </div>
+    </p-toolbar>
+
+    <div class="ui-grid ui-grid-responsive ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top: -1px;">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Outbox Message</header>
+        </div>
+    </div>
+    <p-dataTable #dt [(value)]="messageList" expandableRows="true" [(selection)]="selectedtransportMessage" [rows]="15" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true" [loading]="loading">
+        <p-column [style]="{'width':'10px'}" expander="true" styleClass="col-icon"></p-column>
+        <p-column field="subject" header="Subject" [style]="{'width':'110px'}"></p-column>
+        <p-column field="broadcastTo" header="Message To" [style]="{'width':'50px'}"></p-column>
+        <p-column field="messageTime" header="Time" [style]="{'width':'30px'}"></p-column>
+        <p-column field="messageDate" header="Message Date" [style]="{'width':'35px'}"></p-column>
+        <ng-template let-transportMessageDetail pTemplate="rowexpansion">
+            <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                <div class="ui-grid-row">
+                   <b>Message :- </b> {{transportMessageDetail.message}}
+                </div>
+                <div class="ui-grid-row">
+                   <b> Route :- </b>{{transportMessageDetail.routeNumber}}
+                 </div>
+                <div class="ui-grid-row">
+                    <b> {{transportMessageDetail.stoppageField}} </b>  {{transportMessageDetail.stoppageName}}
+               </div>
+           </div>
+        </ng-template>
+    </p-dataTable>
+</div>
+
+<p-dialog header="Outgoing Message" [(visible)]="messageCenterDialog" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="700" height="510" [contentStyle]="{'overflow':'auto','max-height':'450px'}" (onHide)="onCancel($event)">
+    <!--<div style="overflow-y:auto;height:430px">-->
+        <form [formGroup]="messageform" (ngSubmit)="sendMessageToPatron(messageform.value)" >
+
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Message To :
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-radioButton name="broadcastTo" value="Parents" formControlName="broadcastTo" label="Parents" [(ngModel)]="transportMessage.broadcastTo"></p-radioButton>
+                        <p-radioButton name="broadcastTo" value="Driver" formControlName="broadcastTo" label="Driver" [(ngModel)]="transportMessage.broadcastTo"></p-radioButton>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Broadcast To :
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-multiSelect [options]="routeList" [style]="{'width':'150px'}" maxSelectedLabels="8" formControlName="routeList" [(ngModel)]="selectedRoute" (onChange)="displayStoppages()"></p-multiSelect>
+                        <div style="color:brown" *ngIf="!messageform.controls['routeList'].valid&&messageform.controls['routeList'].dirty">
+                            Route is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showStoppage" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Stoppage :
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <p-multiSelect [options]="stoppageList" [style]="{'width':'150px'}" maxSelectedLabels="8" formControlName="stoppageList" [(ngModel)]="selectedStoppage"></p-multiSelect>
+                        <!--<div style="color:brown" *ngIf="!messageform.controls['routeList'].valid&&messageform.controls['routeList'].dirty">
+                            Stoppage is required
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Subject:
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <input pInputText type="text" formControlName="subject" placeholder="Required" [(ngModel)]="transportMessage.subject" />
+                        <div style="color:brown" *ngIf="!messageform.controls['subject'].valid&&messageform.controls['subject'].dirty">
+                            Subject is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-grid-fluid" style="margin:10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Message :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea rows="5" cols="41" placeholder="Required" formControlName="message" pInputTextarea [(ngModel)]="transportMessage.message"></textarea>
+                        <div style="color:brown" *ngIf="!messageform.controls['message'].valid&&messageform.controls['message'].dirty">
+                            Message is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer style="margin-left:171px;">
+                <div>
+                    <button type="button" style="float:initial;width:110px;height:30px;" label="Cancel" pButton (click)="onCancel($event)"></button>
+                    <button pButton type="submit" style="float:initial;width:110px;height:30px;" label="Send" [disabled]="!messageform.valid"></button>
+                </div>
+            </footer>
+        </form>
+   <!-- </div>-->
+</p-dialog>
+
+
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

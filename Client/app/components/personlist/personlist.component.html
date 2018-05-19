@@ -1,0 +1,582 @@
+<p-dialog header="{{employeeHeader}}" [(visible)]="staffPersonDialog" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="870" height="610" [contentStyle]="{'overflow':'auto','max-height':'550px'}">
+    <form [formGroup]="personviewform" (ngSubmit)="createEmployee(personviewform.value)">
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    First Name :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="firstName" placeholder="Required" [(ngModel)]="pViewDetail.firstName" />
+                    <div style="color:brown" *ngIf="!personviewform.controls['firstName'].valid&&personviewform.controls['firstName'].dirty">
+                        <span *ngIf="personviewform.controls['firstName'].errors['required']">  First name is required</span>
+                        <span *ngIf="personviewform.controls['firstName'].errors['pattern']">First name should be characters</span></div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Last Name :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="lastName" placeholder="Required" [(ngModel)]="pViewDetail.lastName" />
+                    <div style="color:brown" *ngIf="!personviewform.controls['lastName'].valid&&personviewform.controls['lastName'].dirty">
+                        <span *ngIf="personviewform.controls['lastName'].errors['required']">Last name is required</span>
+                        <span *ngIf="personviewform.controls['lastName'].errors['pattern']">Last name should be characters</span>  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Role :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="role" placeholder="Role" formControlName="role" [style]="{'width':'120px'}" [(ngModel)]="selectedRole"></p-dropdown>
+                    <div style="color:brown" *ngIf="!personviewform.controls['role'].valid&&personviewform.controls['role'].dirty">
+                        Role  is required
+                    </div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Email Id :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="email" formControlName="emailId" placeholder="example@gmail.com" [(ngModel)]="pViewDetail.emailId" />
+                     <div style="color:brown" *ngIf="!personviewform.controls['emailId'].valid&&personviewform.controls['emailId'].dirty">
+                         <span *ngIf="personviewform.controls['emailId'].errors['required']">Email id is required</span>
+                         <span *ngIf="personviewform.controls['emailId'].errors['email']">Invalid email id</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Password :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pPassword type="password" (click)="showPassword(input)" #input (onclick)="toggleShow($event)" showHideInput formControlName="password" placeholder="Required" [(ngModel)]="pViewDetail.password" />
+                    <div style="color:brown" *ngIf="!personviewform.controls['password'].valid&&personviewform.controls['password'].dirty">
+                        <span *ngIf="personviewform.controls['password'].errors['required']">Password is required</span>
+                        <span *ngIf="personviewform.controls['password'].errors['minlength']">Must be longer than 4 characters</span>
+                    </div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Retype-Password :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pPassword type="password" formControlName="confirmPassword" placeholder="Required" [(ngModel)]="pViewDetail.confirmPassword" />
+                    <div style="color:brown" *ngIf="personviewform.controls.confirmPassword.touched&&personviewform.hasError('mismatchedPasswords')">
+                        Passwords do not match.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Gender :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-radioButton name="gender" formControlName="gender" value="Male" label="Male" [(ngModel)]="pViewDetail.gender"></p-radioButton>
+                    <p-radioButton name="gender" formControlName="gender" value="Female" label="Female" [(ngModel)]="pViewDetail.gender"></p-radioButton>
+                </div>
+                <div class="ui-grid-col-2">
+                    Date of Birth :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-calendar formControlName="dateOfBirth" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="pViewDetail.dateOfBirth"></p-calendar>
+                    <div style="color:brown" *ngIf="!personviewform.controls['dateOfBirth'].valid&&personviewform.controls['dateOfBirth'].dirty">
+                        <span *ngIf="personviewform.controls['dateOfBirth'].errors['required']">Date of Birth is Required</span>
+                        <!--<span *ngIf="patronform.controls.dateOfBirth.touched&&patronform.hasError('invalidDate')">Date Should Not Be greater then Current Date</span>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Mobile:
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="primaryMobile" placeholder="Required" [(ngModel)]="pViewDetail.primaryMobile" />
+                    <div style="color:brown" *ngIf="!personviewform.controls['primaryMobile'].valid&&personviewform.controls['primaryMobile'].dirty">
+                        <span *ngIf="personviewform.controls['primaryMobile'].errors['pattern']">Mobile number should be number</span>
+                        <span *ngIf="!personviewform.controls['primaryMobile'].errors['pattern']&&personviewform.controls['primaryMobile'].errors['minlength']">Number should not be less than 10</span>
+                        <span *ngIf="!personviewform.controls['primaryMobile'].errors['pattern']&&personviewform.controls['primaryMobile'].errors['maxlength']">Number should not be grater than 10</span>
+                        <span *ngIf="personviewform.controls['primaryMobile'].errors['required']">Mobile number required</span>
+
+                    </div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Phone :
+                </div>
+                <div class="ui-grid-col-3">
+                    <input pInputText type="text" formControlName="secondaryMobile" [(ngModel)]="pViewDetail.secondaryMobile" />
+                    <!--<div style="color:brown" *ngIf="!personviewform.controls['secondaryMobile'].valid&&personform.controls['secondaryMobile'].dirty">
+                        <span *ngIf="personviewform.controls['secondaryMobile'].errors['minlength']">Number Should Not Be Less Than 10 </span>
+                        <span *ngIf="personviewform.controls['secondaryMobile'].errors['maxlength']">Number Should Not Be Less Than 10</span>
+                    </div>-->
+                    <div style="color:brown" *ngIf="!personviewform.controls['secondaryMobile'].valid&&personviewform.controls['secondaryMobile'].dirty">
+                        <span *ngIf="personviewform.controls['secondaryMobile'].errors['pattern']">Phone number should be number</span>
+                        <span *ngIf="!personviewform.controls['secondaryMobile'].errors['pattern']&&personviewform.controls['secondaryMobile'].errors['minlength']">Number should not be less than 10 </span>
+                        <span *ngIf="!personviewform.controls['secondaryMobile'].errors['pattern']&&personviewform.controls['secondaryMobile'].errors['maxlength']">Number should not be grater than 10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Address :
+                </div>
+                <div class="ui-grid-col-4">
+                    <textarea pInputText type="text" formControlName="address" placeholder="Required" autoResize="autoResize" [(ngModel)]="pViewDetail.address"></textarea>
+                    <div style="color:brown" *ngIf="!personviewform.controls['address'].valid&&personviewform.controls['address'].dirty">
+                        Address is required
+                    </div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Country :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="countries" placeholder="Country" formControlName="countries" [style]="{'width':'100px'}" [(ngModel)]="selectedCountry"></p-dropdown>
+                    <div style="color:brown" *ngIf="!personviewform.controls['countries'].valid&&personviewform.controls['countries'].dirty">
+                        Country is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    State :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="countryStates" placeholder="State" formControlName="state" [style]="{'width':'180px'}" [(ngModel)]="selectedState"></p-dropdown>
+                    <div style="color:brown" *ngIf="!personviewform.controls['state'].valid&&personviewform.controls['state'].dirty">
+                        State is required
+                    </div>
+                </div>
+                <div class="ui-grid-col-2">
+                    Postal Code :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="zipCode" placeholder="pincode" [(ngModel)]="pViewDetail.zipCode" />
+                    <div style="color:brown" *ngIf="!personviewform.controls['zipCode'].valid&&personviewform.controls['zipCode'].dirty">
+                        <span *ngIf="personviewform.controls['zipCode'].errors['pattern']">Postal code should be number</span>
+                        <span *ngIf="!personviewform.controls['zipCode'].errors['pattern']&&personviewform.controls['zipCode'].errors['minlength']">Code should not be less than 3 </span>
+                        <span *ngIf="!personviewform.controls['zipCode'].errors['pattern']&&personviewform.controls['zipCode'].errors['maxlength']">Code should not be grater than 8</span>
+                        <span *ngIf="personviewform.controls['zipCode'].errors['required']">Postal code required</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Is Active :
+                </div>
+                <div class="ui-grid-col-1">
+                    <p-checkbox name="isActive" formControlName="isActive" value="isActive" binary="true" [(ngModel)]="pViewDetail.isActive"></p-checkbox>
+                </div>
+                <div class="ui-grid-col-3">
+                    Having Primary Contact:
+                </div>
+                <div class="ui-grid-col-1">
+                    <p-checkbox name="isPrimaryContact" formControlName="isPrimaryContact" value="isPrimaryContact" binary="true" [(ngModel)]="pViewDetail.isPrimaryContact">
+                    </p-checkbox>
+                </div>
+                <div class="ui-grid-col-3">
+                    Using Smart Phone:
+                </div>
+                <div class="ui-grid-col-2">
+                    <p-checkbox name="isHavingSmartPhone" formControlName="isHavingSmartPhone" value="isHavingSmartPhone" binary="true" [(ngModel)]="pViewDetail.isHavingSmartPhone">
+                    </p-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Image:
+                </div>
+                <div class="ui-grid-col-4">
+                    <input #fileInput type="file" class="form-control" name="documents" />
+                </div>
+                <div class="ui-grid-col-6">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{pViewDetail.imgUrl}}" height="60" width="60" class="rounded-circle" />
+                </div>
+
+            </div>
+        </div>
+        <footer style="margin-left:144px;">
+            <div>
+                <button type="button" style="float:initial;width:110px;height:30px;" label="Cancel" pButton (click)="personCancel($event)"></button>
+                <button pButton type="submit" style="width:110px;height:30px;" label="Save" [disabled]="!personviewform.valid"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+
+<div class="card card-w-title">
+     <p-toolbar>
+        <div class="ui-toolbar-group-left">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addPersonView()" label="Add" pTooltip="Add Person" tooltipPosition="top"></button>
+        </div>
+        <div class="ui-toolbar-group-right">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input #gb type="text" pInputText size="30"  placeholder="search">
+            <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top"  (click)="download()"></button>
+        </div>
+    </p-toolbar>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:-1px">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Person</header>
+        </div>
+    </div>
+    <p-dataTable [(value)]="personDetails" exportFilename="personDetails" [(selection)]="selectedPersonDetail" [paginator]="true" [rows]="10" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+        <p-column header="Action" [style]="{'width':'90px'}">
+            <ng-template let-personDetail="rowData" pTemplate type="body">
+                <button type="button" pButton (click)="updatePerson(personDetail)" icon="fa-pencil-square-o" pTooltip="Edit Person" tooltipPosition="top" ></button>
+                <button type="button" pButton (click)="deletePerson(personDetail)" icon="fa-trash" pTooltip="Delete Person" tooltipPosition="top"></button>
+                <button type="button" pButton (click)="addContactperson(personDetail)" icon="fa fa-phone" pTooltip="Add Contact Person" tooltipPosition="top"></button>
+                <button type="button" pButton (click)="addAuthType(personDetail)" icon="fa fa-unlock-alt" pTooltip="Add Authentication" tooltipPosition="top"></button>
+            </ng-template>
+        </p-column>
+        <p-column field="imgUrl" [style]="{'width':'34px'}">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+            </ng-template>
+        </p-column>
+        <p-column field="firstName" header="First Name" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+        <p-column field="lastName" header="Last Name" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+        <p-column field="emailId" header="Email Id" [sortable]="true" [style]="{'width':'112px'}"></p-column>
+        <p-column field="role" header="Role" [sortable]="true" [style]="{'width':'82px'}"></p-column>
+        <p-column field="primaryMobile" header="Mobile" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+    </p-dataTable>
+</div>
+
+
+
+<p-dialog [(visible)]="personContactPersonDialog" header="Contact Person" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="830" height="638" [contentStyle]="{'overflow':'auto','max-height':'578px'}">
+    <div style="padding:4px 10px;border-bottom: 0 none;margin-top:-25px">
+        <p-tabView (onChange)="handleChange($event)" [style]="{'width':'791px','margin-top':'17px','margin-left':'-13px'}">
+            <p-tabPanel header="List" [selected]="selectedTab===1" *ngIf="tab1visible">
+                <p-toolbar [style]="{'width':'784px','margin-left':'-14px','margin-top':'-15px'}">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="activateTab(0,'add')" label="Add" pTooltip="Add Contact Person" tooltipPosition="top"></button>
+                    </div>
+                </p-toolbar>               
+                <p-dataTable [(value)]="personViewDetails" [(selection)]="selectedPersonDetail" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true" [style]="{'width':'784px','margin-left':'-14px','margin-top':'-1px'}">
+                    <p-column header="Action" [style]="{'width':'70px'}">
+                        <ng-template let-personDetail="rowData" pTemplate type="body">
+                            <button type="button" pButton style="float:left" icon="fa-pencil-square-o" (click)="updateContactPerson(0,'edit',personDetail)"  pTooltip="Edit Contact Person" tooltipPosition="top" ></button>
+                            <button type="button" pButton style="float:left" icon="fa-trash" (click)="deletePersonContact(personDetail)"  pTooltip="Delete Contact Person" tooltipPosition="top"></button>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="imgUrl" [style]="{'width':'50px'}">
+                        <ng-template let-col let-car="rowData" pTemplate="body">
+                            <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="firstName" header="First Name"[style]="{'width':'130px'}"></p-column>
+                    <p-column field="lastName" header="Last Name"[style]="{'width':'130px'}"></p-column>
+                    <p-column field="emailId" header="Email Id"[style]="{'width':'157px'}"></p-column>
+                    <p-column field="primaryMobile" header="Primary Mobile"[style]="{'width':'100px'}"></p-column>
+
+                </p-dataTable>
+            </p-tabPanel>
+
+            <p-tabPanel header="Add Contact Person" [selected]="selectedTab===0" *ngIf="tab2visible">
+                <form [formGroup]="personform" (ngSubmit)="createPerson(1)" style="margin-left: 20px;margin-bottom: 20px;margin-left:-10px;">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                First Name :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="firstName" placeholder="Required" [(ngModel)]="personDetail.firstName" />
+                                <div style="color:brown" *ngIf="!personform.controls['firstName'].valid&&personform.controls['firstName'].dirty">
+                                    <span *ngIf="personform.controls['firstName'].errors['required']">First name is required</span>
+                                    <span *ngIf="personform.controls['firstName'].errors['pattern']">First name should be characters</span>
+                                </div> 
+                            </div>
+                            <div class="ui-grid-col-2">
+                                Last Name :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="lastName" placeholder="Required" [(ngModel)]="personDetail.lastName" />
+                                <div style="color:brown" *ngIf="!personform.controls['lastName'].valid&&personform.controls['lastName'].dirty">
+                                    <span *ngIf="personform.controls['lastName'].errors['required']">Last name is required</span>
+                                    <span *ngIf="personform.controls['lastName'].errors['pattern']">Last name should be characters</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                Email Id :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="email" formControlName="emailId" placeholder="example@gmail.com" [(ngModel)]="personDetail.emailId" />
+                                <div style="color:brown" *ngIf="!personform.controls['emailId'].valid&&personform.controls['emailId'].dirty">
+                                    <span *ngIf="personform.controls['emailId'].errors['required']">Email is required</span>
+                                    <span *ngIf="personform.controls['emailId'].errors['email']">Invalid email id</span>
+                                </div>
+                            </div>
+                           
+                            <div class="ui-grid-col-2">
+                                Relation :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown [options]="relations" placeholder="Realtion" formControlName="relation" [style]="{'width':'120px'}" [(ngModel)]="selectedRelation"></p-dropdown>
+                                <div style="color:brown" *ngIf="!personform.controls['relation'].valid&&personform.controls['relation'].dirty">
+                                    Relation is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <!--<div class="ui-grid-col-2">
+                                Gender :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-radioButton name="gender" formControlName="gender" value="Male" label="Male" [(ngModel)]="personDetail.gender"></p-radioButton>
+                                <p-radioButton name="gender" formControlName="gender" value="Female" label="Female" [(ngModel)]="personDetail.gender"></p-radioButton>
+                            </div>-->
+                            <div class="ui-grid-col-2">
+                                Date of Birth :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-calendar formControlName="dateOfBirth" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2030-1" dateFormat="dd/mm/yy" [showIcon]="true" [(ngModel)]="personDetail.dateOfBirth"></p-calendar>
+                                <div style="color:brown" *ngIf="!personform.controls['dateOfBirth'].valid&&personform.controls['dateOfBirth'].dirty">
+                                    <span *ngIf="personform.controls['dateOfBirth'].errors['required']">Date of birth is required</span>
+                                </div>
+                        </div>
+                    </div>
+                        </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                Mobile  :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="primaryMobile" placeholder="Required" [(ngModel)]="personDetail.primaryMobile" />
+                                <div style="color:brown" *ngIf="!personform.controls['primaryMobile'].valid&&personform.controls['primaryMobile'].dirty">
+                                    <span *ngIf="personform.controls['primaryMobile'].errors['pattern']">Mobile number should be number</span>
+                                    <span *ngIf="!personform.controls['primaryMobile'].errors['pattern']&&personform.controls['primaryMobile'].errors['minlength']">Number should not be less than 10</span>
+                                    <span *ngIf="!personform.controls['primaryMobile'].errors['pattern']&&personform.controls['primaryMobile'].errors['maxlength']">Number should not be grater than 10</span>
+                                    <span *ngIf="personform.controls['primaryMobile'].errors['required']">Mobile number required</span>
+
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                Phone :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="secondaryMobile" placeholder="secondary mobile" [(ngModel)]="personDetail.secondaryMobile" />
+                                <div style="color:brown" *ngIf="!personform.controls['secondaryMobile'].valid&&personform.controls['secondaryMobile'].dirty">
+                                    <span *ngIf="personform.controls['secondaryMobile'].errors['pattern']">Phone number should be number</span> <span *ngIf="!personform.controls['secondaryMobile'].errors['pattern']&&personform.controls['secondaryMobile'].errors['minlength']">Number should not be less than 10 </span>
+                                    <span *ngIf="!personform.controls['secondaryMobile'].errors['pattern']&&personform.controls['secondaryMobile'].errors['maxlength']">Number should not be grater than 10</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                Address :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <textarea pInputText type="text" formControlName="address" placeholder="Required" autoResize="autoResize" [(ngModel)]="personDetail.address"></textarea>
+                                <div style="color:brown" *ngIf="!personform.controls['address'].valid&&personform.controls['address'].dirty">
+                                    Address is required
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                Country :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown [options]="countries" placeholder="Country" formControlName="countries" [style]="{'width':'100px'}" [(ngModel)]="selectedCountry"></p-dropdown>
+                                <div style="color:brown" *ngIf="!personform.controls['countries'].valid&&personform.controls['countries'].dirty">
+                                    Country is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                State :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown [options]="countryStates" placeholder="State" formControlName="state" [style]="{'width':'180px'}" [(ngModel)]="selectedState"></p-dropdown>
+                                <div style="color:brown" *ngIf="!personform.controls['state'].valid&&personform.controls['state'].dirty">
+                                    State is required
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                Postal Code :
+                            </div>
+                            <div class="ui-grid-col-">
+                                <input pInputText type="text" formControlName="zipCode" placeholder="pincode" [(ngModel)]="personDetail.zipCode" />
+                                <div style="color:brown" *ngIf="!personform.controls['zipCode'].valid&&personform.controls['zipCode'].dirty">
+                                    <span *ngIf="personform.controls['zipCode'].errors['pattern']">Postal code should be number</span>
+                                    <span *ngIf="!personform.controls['zipCode'].errors['pattern']&&personform.controls['zipCode'].errors['minlength']"> Code should not be less than 3 </span>
+                                    <span *ngIf="!personform.controls['zipCode'].errors['pattern']&&personform.controls['zipCode'].errors['maxlength']"> Code should not be grater than 8</span>
+                                    <span *ngIf="personform.controls['zipCode'].errors['required']">Postal code is required</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                Active :
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="isActive" formControlName="isActive" value="isActive" binary="true" [(ngModel)]="personDetail.isActive"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                Having Primary Contact:
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="isPrimaryContact" formControlName="isPrimaryContact" value="isPrimaryContact" binary="true" [(ngModel)]="personDetail.isPrimaryContact">
+                                </p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                Using Smart Phone :
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <p-checkbox name="isHavingSmartPhone" formControlName="isHavingSmartPhone" value="isHavingSmartPhone" binary="true" [(ngModel)]="personDetail.isHavingSmartPhone">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                Image :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input #personImage type="file" class="form-control" name="imgUrl" />
+                            </div>
+                            <div class="ui-grid-col-6">
+
+                                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{personDetail.imgUrl}}" height="60" width="60" class="rounded-circle" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <footer style="margin-left:145px;">
+                        <div>
+                            <button type="button" style="float:initial;width:110px;height:30px;" label="Cancel" pButton (click)="contactcancel(1)"></button>
+                            <button pButton type="submit" style="width:110px;height:30px;" label="Save" [disabled]="!personform.valid"></button>
+                        </div>
+                    </footer>
+                </form>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</p-dialog>
+
+
+<p-dialog [(visible)]="personAuthDialog" header="Person Authentication" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="700" height="380">
+    <div style="padding:4px 10px;border-bottom: 0 none;width:663px;margin-top:-25px">
+        <p-tabView (onChange)="handleChange1($event)" [style]="{'width':'663px','margin-top':'17px','margin-left':'-13px'}">
+            <p-tabPanel header="List" [selected]="selectedTab===1" *ngIf="tab1Authenticationvisible">
+                <!--<div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;width:630px;border-bottom: 0 none;margin-top:20px;margin-right:-25px;margin-left:-25px">
+                    <div class="ui-grid-row">
+                        <div>
+                            <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="activateTab1(0,'add')" label="Add" data-toggle="tooltip" data-placement="right" title="Add Authentication"></button>
+                        </div>&nbsp;
+                    </div>
+                </div>-->
+
+                <p-toolbar [style]="{'width':'656px','margin-left':'-14px','margin-top':'-15px'}">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="activateTab1(0,'add')" label="Add" pTooltip="Add Authentication" tooltipPosition="top"></button>
+                    </div>
+
+                </p-toolbar>
+                <p-dataTable [(value)]="authTypeDetails" [(selection)]="selectAuthenticationTypeDetail" [rows]="4" [paginator]="true" [pageLinks]="3" [responsive]="true" [style]="{'width':'656px','margin-left':'-14px','margin-top':'-1px'}">
+                    <p-column header="Action" [style]="{'width':'100px'}">
+                        <ng-template let-authDetail="rowData" pTemplate type="body">
+                            <button type="button" pButton style="float:left" icon="fa-pencil-square-o" (click)="updateAuthType(0,'edit',authDetail)" pTooltip="Edit Authentication" tooltipPosition="top"></button>
+                            <button type="button" pButton style="float:left" icon="fa-trash" (click)="deleteAuthType(authDetail)" pTooltip="Delete Authentication" tooltipPosition="top"></button>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="hashValue" header="Hash Value"></p-column>
+                    <p-column field="modeType" header="Authentication Type"></p-column>
+                    <p-column field="remark" header="Remark"></p-column>
+                </p-dataTable>
+            </p-tabPanel>
+
+            <p-tabPanel header="Add Authentication" [selected]="selectedTab===0" *ngIf="tab2Authenticationvisible">
+                <form [formGroup]="authform" (ngSubmit)="createAuthType(1)">
+                     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                Hash Value :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="hashvalue" placeholder="Required" [(ngModel)]="authenticationTypeDetail.hashValue" />
+                                <div style="color:brown" *ngIf="!authform.controls['hashvalue'].valid&&authform.controls['hashvalue'].dirty">
+                                    Hash Value Is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                Authetication Mode :
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="authMode" placeholder="Select Mode" [style]="{'width':'140px'}" formControlName="authmode" [(ngModel)]="selectedAuthMode"> </p-dropdown>
+                                <div style="color:brown" *ngIf="!authform.controls['authmode'].valid&&authform.controls['authmode'].dirty">
+                                    Authetication Mode is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                Remark :
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText type="text" formControlName="remark" [(ngModel)]="authenticationTypeDetail.remark" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer style="margin-left:157px;">
+                        <div>                            
+                            <button type="button" style="float:initial;width:90px;height:30px;" label="Cancel" pButton (click)="onCancel(1)"></button>
+                            <button pButton type="submit" style="width:90px;height:30px"  label="Save" [disabled]="!authform.valid"></button>
+                        </div>
+                    </footer>
+                </form>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</p-dialog>
+
+
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>
+

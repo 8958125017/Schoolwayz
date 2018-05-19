@@ -1,0 +1,302 @@
+<div class="card card-w-title">
+    
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" pButton icon="fa-plus" style="float:left" (click)="addEvent()" label="Add" data-placement="right" title="Add Event" data-toggle="tooltip"></button>
+            </div>&nbsp;&nbsp;
+
+            <div class="ui-grid-col-4">
+                <button type="button" pButton icon="fa-trash" style="float:left" (click)="deleteEvent(selectedEventDetail)" label="Delete" data-placement="right" title="Delete Event" data-toggle="tooltip"></button>
+            </div>
+
+            <div class="ui-grid-col-4">
+
+            </div>&nbsp;
+
+            <div class="ui-grid-col-5">
+                <input #gb type="text" pInputText size="30" style="float:right" placeholder="search">
+                <i class="fa fa-search" style="float:right;margin:4px 4px 0 0"></i>
+            </div>
+            &nbsp;
+            <div>
+                <button type="button" style="float:right;" pButton icon="fa-file-o" iconPos="left" label="Export" data-toggle="tooltip" data-placement="right" title="Download" (click)="download()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Events</header>
+        </div>
+    </div>
+    <p-dataTable #dt [(value)]="eventDetails" [(selection)]="selectedEventDetail" [rows]="15" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true" [loading]="loading">
+       
+        <p-column [style]="{'width':'10px'}" selectionMode="multiple"></p-column>
+        <p-column header="Action" [style]="{'width':'50px'}">
+            <ng-template let-eventDetail="rowData" pTemplate type="body">
+                <button type="button" pButton (click)="addParticipants(eventDetail)" icon="fa-user-plus" data-placement="right" title="Add Participants" data-toggle="tooltip"></button>
+                <button type="button" pButton (click)="updateEvent(eventDetail)" icon="fa-pencil-square-o" data-placement="right" title="Edit Event" data-toggle="tooltip"></button>
+            </ng-template>
+        </p-column>
+
+        <p-column field="title" header="Title" [style]="{'width':'90px'}"></p-column>
+        <p-column field="occurenceType" header="Occurence" [style]="{'width':'60px'}"></p-column>
+        <p-column field="startDate" header="StartDate" [style]="{'width':'60px'}"></p-column>
+        <p-column field="endDate" header="EndDate" [style]="{'width':'60px'}"></p-column>
+        <p-column field="startTime" header="StartTime" [style]="{'width':'50px'}"></p-column>
+        <p-column field="endTime" header="EndTime" [style]="{'width':'50px'}"></p-column>
+
+    </p-dataTable>
+</div>
+<p-dialog header="Participants List" [(visible)]="participants" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="750" height="500">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+
+        <!--<div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+            <div class="ui-grid-row">
+                <div>
+                    <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="openSearchBox()" label="Add"></button>
+                </div>&nbsp;&nbsp;
+                <div>
+                    <button type="button" pButton style="float:left;width:90px" icon="fa-trash" (click)="declinepatron(selectedPatronDetail)" label="Decline"></button>
+                </div>&nbsp;
+                <div>
+                    <button type="button" pButton style="float:left;width:80px" label="Cancel" (click)="onCancel($event)"></button>
+                </div>
+                <div class="ui-grid-col-6">
+                </div>&nbsp;
+                <div>
+                    <button type="button" style="float:right;" pButton icon="fa-file-o" iconPos="left" label="Export" data-toggle="tooltip" data-placement="right" title="Download" (click)="download()"></button>
+                </div>
+            </div>
+        </div>-->
+        <p-toolbar>
+            <div class="ui-toolbar-group-left">
+                <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="openSearchBox()" label="Add"></button>
+                <button type="button" pButton style="float:left;width:93px" icon="fa-trash" (click)="declinepatron(selectedPatronDetail)" label="Decline"></button>
+                <button type="button" pButton style="float:left;width:80px" label="Cancel" (click)="onCancel($event)"></button>
+            </div>
+
+            <div class="ui-toolbar-group-right">
+                <button type="button" style="float:right;width:90px" pButton icon="fa-file-o" iconPos="left" label="Export" data-toggle="tooltip" data-placement="right" title="Download" (click)="download()"></button>
+            </div>
+        </p-toolbar><div class="ui-grid-row">
+            <p-dataTable #dt [(value)]="patronDetailList" [(selection)]="selectedPatronDetail" [rows]="8" [paginator]="true" [pageLinks]="3" [responsive]="true" [globalFilter]="gbb">
+                <p-column [style]="{'width':'5px'}" selectionMode="single"></p-column>
+                <p-column field="imgUrl" [style]="{'width':'30px'}">
+                    <ng-template let-col let-car="rowData" pTemplate="body">
+                        <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                    </ng-template>
+                </p-column>
+                <p-column field="firstName" header="First Name" [sortable]="true" [filter]="true" [style]="{'width':'45px'}"></p-column>
+                <p-column field="lastName" header="LastName" [sortable]="true" [filter]="true" [style]="{'width':'45px'}"></p-column>
+                <p-column field="rollNo" header="RollNo" [sortable]="true" [filter]="true" [style]="{'width':'40px'}"></p-column>
+                <p-column field="class" header="Class" [sortable]="true" [filter]="true" [style]="{'width':'40px'}"></p-column>
+                <p-column field="section" header="Section" [sortable]="true" [filter]="true" [style]="{'width':'40px'}"></p-column>
+
+            </p-dataTable>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Patron List" [(visible)]="patronMapDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="750" height="600">
+
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" pButton style="float:left;width:80px" (click)="mapPatron(eventDetail,selectedPatronDetail)" label="Add" data-toggle="tooltip" data-placement="top" title="MapPatron"></button>
+            </div>&nbsp;&nbsp;
+            <div>
+                <button type="button" label="Cancel" style="float:left;width:80px" pButton (click)="onSearchCancel($event)"></button>
+            </div>&nbsp;
+        </div>
+    </div>
+    <div class="ui-grid-row">
+        <p-dataTable #dt [(value)]="patronDetails" [(selection)]="selectedPatronDetail" [rows]="7" [paginator]="true" [pageLinks]="3" [responsive]="true" [globalFilter]="gbb">
+            <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+            <p-column field="imgUrl" [style]="{'width':'77px'}">
+                <ng-template let-col let-car="rowData" pTemplate="body">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                </ng-template>
+            </p-column>
+            <p-column field="firstName" header="First Name" [sortable]="true"></p-column>
+            <p-column field="lastName" header="LastName" [sortable]="true"></p-column>
+            <p-column field="rollNo" header="RollNo" [sortable]="true"></p-column>
+            <p-column field="class" header="Class" [sortable]="true"></p-column>
+            <p-column field="section" header="Section" [sortable]="true"></p-column>
+
+        </p-dataTable>
+    </div>
+
+</p-dialog>
+<p-dialog [(visible)]="deline"header="Decline Event" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="600" height="300">
+   
+    <div hidden="hidden"><input id="id" class="form-control" type="text" placeholder="id" [(ngModel)]="declineRequest" /></div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Deline Mode :
+            </div>
+            <div class="ui-grid-col-9">
+                <p-dropdown [options]="delineMode" [style]="{'width':'150px'}" [(ngModel)]="selectedMode"></p-dropdown>
+            </div>
+
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Description :
+            </div>
+            <div class="ui-grid-col-6">
+                <textarea pInputText type="text" placeholder="Required" autoResize="autoResize" [(ngModel)]="declineRequest.declineReason"></textarea>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col">
+                </div>
+                <div>
+                    <button type="button" label="Save" pButton (click)="delinedPatron()" Width="89px"></button>
+                </div>
+                <div>
+                    <button type="button" label="Cancel" pButton (click)="Cancel($event)"></button>
+                </div>
+            </div>
+        </div>
+    </footer>
+</p-dialog>
+<p-dialog [(visible)]="eventDialog" header="Event" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="800" height="610">
+    <div hidden="hidden"><input id="id" class="form-control" type="text" placeholder="id" [(ngModel)]="eventDetail.id" /></div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Title :
+            </div>
+            <div class="ui-grid-col-6">
+                <input pInputText type="text" placeholder="Required" [(ngModel)]="eventDetail.title" />
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Description :
+            </div>
+            <div class="ui-grid-col-6">
+                <textarea pInputText type="text" placeholder="Required" autoResize="autoResize" [(ngModel)]="eventDetail.description"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Occurence :
+            </div>
+            <div class="ui-grid-col-9">
+                <p-dropdown [options]="occurenceType" [style]="{'width':'120px'}" (onChange)="onSelectMode()" [(ngModel)]="selectedOccurence"></p-dropdown>
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="showWeek" class="ui-grid ui-grid-responsive ui-grid-pad " style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Days of Week :
+            </div>
+            <div class="ui-grid-col-13">
+                <p-selectButton [options]="days" [(ngModel)]="selectedDays" multiple="multiple"></p-selectButton>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showMonth" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                DayOfMonth :
+            </div>
+            <div>
+                <p-multiSelect [options]="months" [(ngModel)]="selectedMonths"></p-multiSelect>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Start Date :
+            </div>
+            <div class="ui-grid-col-4">
+                <p-calendar dateFormat="dd/mm/yy" [showIcon]="true" [(ngModel)]="eventDetail.startDate"></p-calendar>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                End Date :
+            </div>
+            <div class="ui-grid-col-4">
+                <p-calendar dateFormat="dd/mm/yy" [showIcon]="true" [(ngModel)]="eventDetail.endDate"></p-calendar>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Start Time :
+            </div>
+            <div class="ui-grid-col-2">
+                <p-calendar [timeOnly]="true" hourFormat="24" [(ngModel)]="eventDetail.startTime"></p-calendar>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                End Time :
+            </div>
+            <div class="ui-grid-col-2">
+                <p-calendar [timeOnly]="true" hourFormat="24" [(ngModel)]="eventDetail.endTime"></p-calendar>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                Remark :
+            </div>
+            <div class="ui-grid-col-6">
+                <input pInputText type="text" placeholder="Required" [(ngModel)]="eventDetail.remarks" />
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" label="Save" pButton (click)="createEvent()"></button>
+            </div>
+            <div>
+                <button type="button" label="Cancel" pButton (click)="eventCancel($event)"></button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

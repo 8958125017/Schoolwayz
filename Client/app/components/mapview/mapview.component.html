@@ -1,0 +1,282 @@
+﻿<div id="parent" class="ui-fluid">
+    <div id="firstChild" class="ui-g">
+        <div id="secondChild" class="ui-g-12">
+            <div id="thirdChild" class="card card-w-title">
+                <p-toolbar>
+                    <div class="ui-toolbar-group-left">
+                        <!--<p-calendar dateFormat="yy-mm-dd"[monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [(ngModel)]="selectedDate" [style]="{'width':'100px'}" (onSelect)="selectRoute($event)"></p-calendar>-->
+                        <p-dropdown [options]="routeList" [style]="{'width':'95px'}" [(ngModel)]="selectedRoute" (onChange)="selectRoute($event)"></p-dropdown>
+                    </div>
+                </p-toolbar>
+                <br>
+                <p-tabView *ngIf="visible">
+                    <div>
+                        <p-tabPanel header="Map" leftIcon="fa fa-map-marker">
+                            <div class="ui-fluid">
+                                <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false"
+                                                 (mapClick)="mapClicked($event)">
+                                    <sebm-google-map-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat"
+                                                            [longitude]="m.lng" [label]="m.label" [title]="m.title" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)"
+                                                            [iconUrl]="m.icon">
+                                    </sebm-google-map-marker>
+
+                                    <sebm-google-map-marker *ngFor="let org of orgMarkers; let i = index" (markerClick)="clickedMarker(org.label, i)" [latitude]="org.lat"
+                                                            [longitude]="org.lng"
+                                                            [iconUrl]="org.icon">
+                                    </sebm-google-map-marker>
+
+                                    <sebm-google-map-marker *ngFor="let s of stops; let i = index" (markerClick)="clickedMarker(s.label, i)" [latitude]="s.lat"
+                                                            [longitude]="s.lng" [label]="s.label" [title]="s.title" [markerDraggable]="s.draggable" (dragEnd)="markerDragEnd(s, $event)"
+                                                            [iconUrl]="s.icon">
+                                    </sebm-google-map-marker>
+
+                                    <sebm-google-map-polyline *ngFor="let p of polyline" [draggable]="false" [editable]="false" [clickable]="false"
+                                                              [strokeColor]="p.strokeColor" [geodesic]="p.geodesic" [strokeOpacity]="p.strokeOpacity" [strokeWeight]="p.strokeWeight">
+                                        <sebm-google-map-polyline-point *ngFor="let p of polyline" [latitude]="p.lat" [longitude]="p.lng">
+                                        </sebm-google-map-polyline-point>
+                                    </sebm-google-map-polyline>
+                                </sebm-google-map>
+                            </div>
+                        </p-tabPanel>
+                    </div>
+                    <!--<div [hidden]="tabVisible2">-->
+                    <p-tabPanel header="Route Detail" leftIcon="fa fa-map-marker" *ngIf="tabVisible1">
+                        <p-toolbar>
+
+                            <div class="ui-toolbar-group-left">
+                                Route : <b>{{routeNumber}}</b>&nbsp;
+                                Driver : <b>
+                                    {{driverName}}&nbsp;<img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{driverImage}}" class="rounded-circle" height="40" width="40" />
+                                </b>&nbsp;&nbsp;Staff : <b>
+                                    {{routeStaffName}}&nbsp;<img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{routeStaffImage}}" class="rounded-circle" height="40" width="40" />
+                                </b>&nbsp;&nbsp;Coordinator : <b>
+                                    {{coordinatorName}}&nbsp;<img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{coordinatorImage}}" class="rounded-circle" height="40" width="40" />
+                                </b>
+                            </div>
+                            &nbsp;&nbsp;
+                            <div class="ui-toolbar-group-right" style="
+                                        width: 255px;
+                                        margin-top: 12px;">
+                                <div class="ui-g-1" style="background-color:red"></div>
+                                <div class="ui-g-1" style="
+                                        width: 45px;
+                                        margin-top: -10px;">Late</div>
+                                <div class="ui-g-1" style="background-color:greenyellow"></div>
+                                <div class="ui-g-1" style="
+                                        width: 68px;
+                                        margin-top: -10px">On Time</div>
+                                <div class="ui-g-1" style="background-color:lightgrey"></div>
+                                <div class="ui-g-1" style="
+                                        width: 75px;
+                                        margin-top: -10px;">Next Stop</div>
+                                </div>
+                </p-toolbar>
+                        <div id="visualization"></div>
+                        <div id="hoveredItem"></div>
+                        <br>
+                        
+                        <div class="ui-g-12 ui-lg-5" style="width: 49%;">
+                            <p-dataTable [value]="patronStoppageSummaryArr" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true" [style]="{'margin-bottom':'20px'}">
+                                <p-header>Patron List</p-header>
+                                <p-column field="imgUrl"[style]="{'width':'50px'}">
+                                    <ng-template let-col let-car="rowData" pTemplate="body">
+                                        <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="name"  header="Name"  [style]="{'width':'150px'}"></p-column>
+                                <!--<p-column field="lastName" header="LastName"></p-column>-->
+                                <p-column field="patronClass" header="Class" [style]="{'width':'44px'}"></p-column>
+                                <!--<p-column field="section" header="Section" [style]="{'width':'55px'}"></p-column>-->
+                                <p-column field="rollNumber" header="Roll No" [style]="{'width':'57px'}"></p-column>
+                                <p-column field="stoppageName" header="Stoppage" [style]="{'width':'135px'}"></p-column>
+                                
+                            </p-dataTable>
+                        </div>
+                        <div class="ui-g-12 ui-lg-5" style="width: 51%;">
+
+                            <p-dataTable [value]="stoppageSummaryArr" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true" [style]="{'margin-bottom':'20px'}">
+                                <p-header>Stoppage Detail</p-header>
+                                <p-column field="imgUrl" [style]="{'width':'50px'}">
+                                    <ng-template let-col let-car="rowData" pTemplate="body">
+                                        <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="name" header="Name" [style]="{'width':'120px'}"></p-column>
+                                <p-column field="patronClass" header="Class" [style]="{'width':'44px'}"></p-column>
+                                <!--<p-column field="section" header="Section" [style]="{'width':'55px'}"></p-column>
+                                <p-column field="rollNumber" header="RollNo" [style]="{'width':'50px'}"></p-column>-->
+                                <p-column field="reachedTime" header="Arrival Time" [style]="{'width':'50px'}"></p-column>
+                                <p-column field="stoppageName" header="Stoppage" [style]="{'width':'100px'}"></p-column>
+                                <!--<p-column field="status" header="Status" [style]="{'width':'60px'}"></p-column> -->
+                                <p-column field="status" header="Status" [style]="{'width':'100px'}">
+                                    <template let-col let-rep="rowData" pTemplate>
+                                        <div [style.color]="rep.headerColor">
+                                            <b>{{rep[col.field]}}</b>
+                                        </div>
+                                    </template>
+                                </p-column>
+                                
+                            </p-dataTable>
+
+                        </div>
+
+
+                        <!--<div class="ui-g-12 ui-lg-4">
+            <p-panel header="Contacts" [style]="{'height':'100%'}">
+                <ul class="contacts">
+                    <li>
+                        <a href="#">
+                            <span class="name">Claire Williams</span>
+                            <span class="email">clare@pf-omega.com</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="name">Jason Dourne</span>
+                            <span class="email">jason@pf-omega.com</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="name">Jane Davidson</span>
+                            <span class="email">jane@pf-omega.com</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="name">Tony Corleone</span>
+                            <span class="email">tony@pf-omega.com</span>
+                        </a>
+                    </li>
+                </ul>
+            </p-panel>
+        </div>-->
+
+
+                    </p-tabPanel>
+                    <!--</div>-->
+                    <!--<div [hidden]="tabVisible1">-->
+                    <p-tabPanel header="Route Monitoring" leftIcon="fa fa-map-marker" *ngIf="tabVisible2">
+                        <div style="float:left;width: 50px;height: 20px;margin: 5px;background-color:#FFC0CB;text-align:center">Pickup</div>
+                        <div style="float:left;width: 50px;height: 20px;margin: 5px;background-color:hotpink;text-align:center">Drop</div>
+                        <div style="float:left;width: 80px;height: 20px;margin: 5px;background-color:#FF83FA;text-align:center">PickupTime</div>
+                        <div style="float:left;width: 80px;height: 20px;margin: 5px;background-color:#CD69C9;text-align:center">DropTime</div>
+                        <div style="float:left;width: 70px;height: 20px;margin: 5px;background-color:#FFFF66;text-align:center">UnMatch</div>
+                        <div style="width:auto;margin-top:10px">
+                            <table class="table" style="margin:0; overflow:scroll">
+                                <tbody>
+                                    <tr *ngFor="let row of routeMonitorList">
+                                        <td style="vertical-align:middle;background-color:coral">
+                                            {{row[0].routeId}}
+                                        </td>
+                                        <td *ngFor="let col of row">
+                                            <!--(click)="getData(col,row[0])" -->
+                                            <div ng-repeat="col of row">
+                                                <table>
+                                                    <tr>
+                                                        <td *ngIf="col.runDirection === '1' && col.pickUpTime === 'NA' " colspan="2" style="text-align:center; ">
+                                                            <div style="background-color:#ff6666;">{{col.stoppageName}}</div>
+                                                        </td>
+                                                        <td *ngIf="col.runDirection === '1' && col.pickUpTime !== 'NA' " colspan="2" style="text-align:center; ">
+                                                            <div style="background-color:#66ff66;">{{col.stoppageName}}</div>
+                                                        </td>
+                                                        <td *ngIf="col.runDirection === '2' && col.dropTime === 'NA' " colspan="2" style="text-align:center; ">
+                                                            <div style="background-color:#ff6666;">{{col.stoppageName}}</div>
+                                                        </td>
+                                                        <td *ngIf="col.runDirection === '2' && col.dropTime !== 'NA' " colspan="2" style="text-align:center;">
+                                                            <div style="background-color:#66ff66;">{{col.stoppageName}}</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td *ngIf="col.expectedPickCount !== col.pickCount" style="text-align:center;">
+                                                            <div style="background-color:#FFFF66;text-align:center;cursor:pointer;" (click)="getPickupData(col)">
+                                                                {{col.expectedPickCount}} - {{col.pickCount}}
+                                                            </div>
+                                                        </td>
+                                                        <td *ngIf="col.expectedPickCount === col.pickCount" style="text-align:center;">
+                                                            <div style="background-color:#FFC0CB;text-align:center;cursor:pointer;" (click)="getPickupData(col)">
+                                                                {{col.expectedPickCount}} - {{col.pickCount}}
+                                                            </div>
+                                                        </td>
+                                                        <td *ngIf="col.expectedDropCount !== col.dropCount" style="text-align:center;">
+                                                            <div style="background-color:#FFFF66;text-align:center;cursor:pointer;" (click)="getDropData(col)">
+                                                                {{col.expectedDropCount}} - {{col.dropCount}}
+                                                            </div>
+                                                        </td>
+
+                                                        <td *ngIf="col.expectedDropCount === col.dropCount" style="text-align:center;">
+                                                            <div style="background-color:hotpink;text-align:center;cursor:pointer;" (click)="getDropData(col)">
+                                                                {{col.expectedDropCount}} - {{col.dropCount}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td *ngIf="col.pickUpTime !== 'NA'" style="text-align:center;">
+                                                            <div style="background-color:#FF83FA;text-align:center;width:85px;text-align:center;">
+                                                                {{col.expectedPickTime}} - {{col.pickUpTime}}
+                                                            </div>
+                                                        </td>
+                                                        <td *ngIf="col.dropTime !== 'NA'" style="text-align:center;">
+                                                            <div style="background-color:#CD69C9;text-align:center; width:85px;text-align:center;">
+                                                                {{col.expectedDropTime}} - {{col.dropTime}}
+                                                            </div>
+                                                        </td>
+                                                        <td *ngIf="col.pickUpTime === 'NA'" style="text-align:center;">
+                                                            <div style="background-color:#FFFF66;text-align:center;width:85px;text-align:center;">
+                                                                {{col.expectedPickTime}} - {{col.pickUpTime}}
+                                                            </div>
+                                                        </td>
+                                                        <td *ngIf="col.dropTime === 'NA'" style="text-align:center;">
+                                                            <div style="background-color:#FFFF66;text-align:center;width:85px;text-align:center;">
+                                                                {{col.expectedDropTime}} - {{col.dropTime}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </p-tabPanel>
+                    <!--</div>-->
+                </p-tabView>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Patron Detail" [(visible)]="patronDetail" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="600" height="400">
+    <div class="ui-grid-col-12">
+        <div class="ui-grid-col-16">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
+                <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-10">
+                            <header style="text-align:left;font-size:120%">
+                                Student List
+                            </header>
+                        </div>
+                        <div class="ui-grid-col-2">
+                            <button type="button" style="float:right;" pButton icon="fa-file-o" iconPos="left" label="Export" data-toggle="tooltip" data-placement="right" title="Download" (click)="download()"></button>
+                        </div>
+                    </div>
+                </div>
+                <p-dataTable [value]="patronInfoList" [rows]="5" [paginator]="true">
+                    <p-column field="imgUrl" [style]="{'width':'50px'}">
+                        <ng-template let-col let-car="rowData" pTemplate="body">
+                            <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="patron.firstName" header="FirstName" [style]="{'width':'70px'} "></p-column>
+                    <p-column field="patron.lastName" header="LastName" [style]="{'width':'70px'} "></p-column>
+                    <p-column field="patron.class" header="Class" [style]="{'width':'40px'} "></p-column>
+                    <p-column field="patron.section" header="Section" [style]="{'width':'40px'} "></p-column>
+                    <p-column field="patron.rollNo" header="RollNo" [style]="{'width':'40px'} "></p-column>
+                    <p-column field="patronStatus" header="Status" [style]="{'width':'50px'} "></p-column>
+                </p-dataTable>
+            </div>
+        </div>
+    </div>
+</p-dialog>

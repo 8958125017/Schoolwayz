@@ -1,0 +1,38 @@
+﻿@model SchoolWayz.Cloud.Web.Controllers.LoginViewModel
+
+@{
+}
+<div id="login-wrapper">
+    
+    <div id="login-container" style="height:345px;">
+        <span class="title"><img src="~/assets/layout/images/schoolwayz.png"></span>
+        <form asp-action="SignIn" method="post" asp-controller="Home" >
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12">
+                    <input asp-for="Username"  autocomplete="off" class="ui-inputtext ui-corner-all ui-state-default ui-widget" placeholder="Username" />
+                    <!--<span asp-validation-for="Username" class="text-danger"></span>-->
+                </div>
+                <div class="ui-g-12">
+                    <input asp-for="Password" autocomplete="off" class="ui-inputtext ui-corner-all ui-state-default ui-widget" placeholder="Password" />
+                    <!--<span asp-validation-for="Password" class="text-danger"></span>-->
+                </div>
+                <div class="ui-g-12">
+                    <a asp-controller="Home" asp-action="RequestForForgotPassword">Forgot Password</a>
+                    @*<a  asp-controller="Home" asp-action="ForgotPassword">Forgot Password</a>*@
+                </div>
+                <div class="ui-g-12">
+                    <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+                        <span class="ui-button-icon-left ui-c fa fa-fw ui-icon-person"></span>
+                        <span class="ui-button-text ui-c">Sign In</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+   
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

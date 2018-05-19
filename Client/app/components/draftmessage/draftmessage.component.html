@@ -1,0 +1,200 @@
+﻿<div class="card card-w-title">
+    
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" pButton icon="fa-trash " style="float:left" (click)="deleteOutgoingMessage(selectedMessageDetail)" label="Delete "data-toggle="tooltip" data-placement="right" title="delete message"></button>
+            </div>&nbsp;
+        </div>
+    </div>
+         <p-column [style]="{'width':'10px'}" selectionMode="multiple"></p-column>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Draft Message</header>
+        </div>
+    </div>
+    <p-dataTable #dt [(value)]="outgoingMessageDetails" [(selection)]="selectedMessageDetail"   expandableRows="true" [rows]="15" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+   
+        <p-column [style]="{'width':'5px'}" selectionMode="multiple"></p-column>
+        <p-column header="Action" [style]="{'width':'35px'}">
+            <ng-template let-messageDetail="rowData" pTemplate type="body">
+                <button type="button" pButton icon="fa-plus" style="float:left" (click)="createMessage(messageDetail)" label="Add" data-toggle="tooltip" data-placement="right" title="Edit draft message"></button>
+            </ng-template>
+        </p-column>
+        <p-column field="subject" header="Subject" [style]="{'width':'90px'}"></p-column>
+        <p-column field="message" header="Message" [style]="{'width':'175px'}"></p-column>
+        <p-column field="messageDate" header="MessageDate" [style]="{'width':'40px'}"></p-column>
+    </p-dataTable>
+</div>
+<p-dialog header="OutgoingMessage" [(visible)]="messageCenterDialog" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="700" height="450">
+    <div hidden="hidden"><input id="id" class="form-control" type="text" placeholder="id" [(ngModel)]="outgoingMessage.id" /></div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Broadcast To :
+            </div>
+            <div class="ui-grid-col-8">
+                <p-dropdown [options]="outgoingMessageTo" [style]="{'width':'150px'}" (onChange)="onSelectMode()" [(ngModel)]="selectedBroadCast"></p-dropdown>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="showClassSection" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Class :
+            </div>
+            <div class="ui-grid-col-2">
+                <p-multiSelect [options]="classSectionList" [style]="{'width':'150px'}" [(ngModel)]="selectedClassSection"></p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="showClass" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Class :
+            </div>
+            <div class="ui-grid-col-2">
+                <p-multiSelect [options]="classList" [style]="{'width':'150px'}" [(ngModel)]="selectedGrade"></p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="patron" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Patron :
+            </div>
+            <div class="ui-grid-col-15">
+                <button type="button" pButton style="float:left;width:90px" icon="fa-user-plus" (click)="openSearchBox()" label="Select"></button>
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="showIsResponseNeed" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Is Response Need :
+            </div>
+            <div class="ui-grid-col-2">
+                <p-checkbox name="isResponseNeed" value="isResponseNeed" binary="true" [(ngModel)]="outgoingMessage.isResponseNeed"></p-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                subject :
+            </div>
+            <div class="ui-grid-col-6">
+                <input pInputText type="text" placeholder="Required" [(ngModel)]="outgoingMessage.subject" />
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-grid-fluid" style="margin:10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-3">
+                Message:
+            </div>
+            <div class="ui-grid-col-8">
+                <textarea rows="5" cols="40" pInputTextarea [(ngModel)]="outgoingMessage.message"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col">
+            </div>
+            <div>
+                <button type="button" style="float:initial;" label="Save" pButton (click)="sendMessageToPatron(0)"></button>
+            </div>
+            <div>
+                <button type="button" style="float:initial;" label="Send" pButton (click)="sendMessageToPatron(1)"></button>
+            </div>
+            <div>
+                <button type="button" label="Cancel" pButton (click)="onCancel($event)"></button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="displayDialog" header="Acknowledge Detail" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="500" height="600">
+    <p-dataTable #dt [(value)]="deviceDetails" selectionMode="single" [rows]="15" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+        <p-column field="receivedBy" header="Recived By"></p-column>
+        <p-column field="acknowledgeTime" header="Acknowledge Time"></p-column>
+        <p-column header="Acknowledge">
+            <ng-template let-deviceDetail="rowData" pTemplate type="body">
+                <p-checkbox name="isAcknowledge" value="isAcknowledge" binary="true" [(ngModel)]="deviceDetail.isAcknowledge"></p-checkbox>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</p-dialog>
+<!--
+<p-dialog header="AddPatron" [(visible)]="patronMapDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="750" height="645">
+    <div class="ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+        <input #gbb type="text" pInputText size="30" style="float:left" placeholder="search">
+        <i class="fa fa-search" style="float:left;margin:4px 4px 0 0"></i>
+    </div>
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <p-dataTable #dt [(value)]="patronDetails" [(selection)]="selectedPatronDetail" [rows]="7" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" [responsive]="true" [globalFilter]="gbb">
+                <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+                <p-column field="imgUrl" header="Image" [style]="{'width':'77px'}">
+                    <template let-col let-car="rowData" pTemplate="body">
+                        <img src="https://tstschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" height="40" width="40" />
+                    </template>
+                </p-column>
+                <p-column field="firstName" header="First Name" [sortable]="true"></p-column>
+                <p-column field="lastName" header="Last Name" [sortable]="true"></p-column>
+                <p-column field="rollNo" header="Roll No" [sortable]="true"></p-column>
+                <p-column field="class" header="Class" [sortable]="true"></p-column>
+                <p-column field="section" header="Section" [sortable]="true"></p-column>
+
+                <footer>
+                    <div class="ui-helper-clearfix" style="width:100%">
+                        <div class="ui-grid-col-5">
+                            <div>
+                                <button type="button" pButton style="float:left;width:80px" (click)="mapPatron()" label="Add" data-toggle="tooltip" data-placement="top" title="MapPatron"></button>
+                                <button type="button" label="Cancel" style="float:left;width:80px" pButton (click)="onSearchCancel($event)"></button>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </p-dataTable>
+        </div>
+    </div>
+</p-dialog>-->
+
+<p-dialog header="Patron List" [(visible)]="patronMapDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="750" height="600">
+
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" pButton style="float:left;width:80px" (click)="mapPatron()" label="Add" data-toggle="tooltip" data-placement="top" title="MapPatron"></button>
+            </div>&nbsp;&nbsp;
+            <div>
+                <button type="button" label="Cancel" style="float:left;width:80px" pButton (click)="onSearchCancel($event)"></button>
+            </div>&nbsp;
+        </div>
+    </div>
+    <div class="ui-grid-row">
+        <p-dataTable #dt [(value)]="patronDetails" [(selection)]="selectedPatronDetail" [rows]="8" [paginator]="true" [pageLinks]="3" [responsive]="true" [globalFilter]="gbb">
+            <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+            <p-column field="imgUrl" [style]="{'width':'77px'}">
+                <ng-template let-col let-car="rowData" pTemplate="body">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                </ng-template>
+            </p-column>
+            <p-column field="firstName" header="First Name" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="lastName" header="LastName" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="rollNo" header="RollNo" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="class" header="Class" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="section" header="Section" [filter]="true" [sortable]="true"></p-column>
+        </p-dataTable>
+    </div>
+</p-dialog>
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

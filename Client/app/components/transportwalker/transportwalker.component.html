@@ -1,0 +1,213 @@
+﻿
+<div class="card card-w-title">
+   
+            <p-toolbar *ngIf="current">
+                <div class="ui-toolbar-group-left">
+                    <button type="button" pButton icon="fa-user-plus" style="float:left" (click)="addRequest()" label="Add" pTooltip="Add Walking Request" tooltipPosition="top"></button>
+                    <button type="button" pButton icon="fa-trash" style="float:left" (click)="deleteWalker(selectedWalkerDetail)" label="Delete" pTooltip="Delete Walker" tooltipPosition="top"></button>
+                    <button type="button" pButton icon="fa fa-check" style="float:left" (click)="isAcknowledge(selectedWalkerDetail)" label="Approved" pTooltip="Approved Walker" tooltipPosition="top"></button>
+                    <button type="button" pButton label="History" pTooltip="History Walker" tooltipPosition="top" (click)="historyWalker()"></button>
+                </div>
+                <div class="ui-toolbar-group-right">
+                    <!--<i class="fa fa-search"></i>
+                    <input #gf type="text" pInputText size="30" placeholder="search">-->
+                    <button type="button" style="float:right;margin-left:1px" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top" (click)="download()"></button>
+                </div>
+            </p-toolbar>
+       
+        <p-toolbar *ngIf="history">
+            <div class="ui-toolbar-group-left">
+                From : <p-calendar dateFormat="yy-mm-dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [(ngModel)]="startDate"></p-calendar>
+                To :<p-calendar dateFormat="yy-mm-dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [(ngModel)]="endDate"></p-calendar>
+                <button type="button" pButton label="Go" style="width:50px;height:27px" (click)="getSelectedDateWalker($event)" pTooltip="Click here" tooltipPosition="top"></button>
+                <button type="button" pButton icon="fa-trash" (click)="deleteWalker(selectedWalkerDetail)" label="Delete" pTooltip="Delete Walker" tooltipPosition="top"></button>
+                <button type="button" pButton label="Current" pTooltip="Current Walker" tooltipPosition="top" (click)="currentWalker()"></button>
+            </div>
+            <div class="ui-toolbar-group-right">
+                <!--<i class="fa fa-search"></i>
+                <input #gf type="text" pInputText size="30" placeholder="search">-->
+                <button type="button" style="float:right;margin-left:1px" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top" (click)="download()"></button>
+            </div>
+
+        </p-toolbar>
+
+        <div class="ui-grid ui-grid-responsive ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top: -1px;">
+            <div class="ui-grid-row">
+                <header style="text-align:left;font-size:120%">Transport Walker</header>
+            </div>
+        </div>
+        <p-dataTable [(value)]="transportWalkerList" [(selection)]="selectedWalkerDetail" [rows]="8" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" [responsive]="true" [globalFilter]="gf" [loading]="loading">
+            <p-column [style]="{'width':'40px'}" selectionMode="multiple"></p-column>
+            <p-column field="imgUrl" [style]="{'width':'70px'}">
+                <ng-template let-col let-car="rowData" pTemplate="body">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="50" width="50" />
+                </ng-template>
+            </p-column>
+            <p-column field="firstName" header="First Name" [sortable]="true" [style]="{'width':'130px'}"></p-column>
+            <p-column field="lastName" header="Last Name" [sortable]="true" [style]="{'width':'120px'}"></p-column>
+            <p-column field="requestBy" header="Request By" [style]="{'width':'100px'}"></p-column>
+            <p-column field="requestMode" header="Request Mode" [style]="{'width':'130px'}"></p-column>
+            <p-column field="pickImage" header="Pick" [style]="{'width':'40px'}">
+                <ng-template let-col1 let-car="rowData" pTemplate="body">
+                    <img src="{{car[col1.field]}}" height="25" width="25" />
+                </ng-template>
+            </p-column>
+            <p-column field="dropImage" header="Drop" [style]="{'width':'40px'}">
+                <ng-template let-col2 let-car="rowData" pTemplate="body">
+                    <img src="{{car[col2.field]}}" height="25" width="25" />
+                </ng-template>
+            </p-column>
+            <p-column field="requestDate" header="Request Date" [style]="{'width':'100px'}"></p-column>
+            <p-column field="description" header="Comment"></p-column>
+            <p-column header="Approved" [style]="{'width':'70px'}">
+                <ng-template let-transportWalkingRequest="rowData" pTemplate type="body">
+                    <div>
+                        <p-checkbox name="isAcknowledged" value="isActive" disabled binary="true" [(ngModel)]="transportWalkingRequest.isAcknowledged"></p-checkbox>
+                    </div>
+
+                </ng-template>
+            </p-column>
+
+        </p-dataTable>
+    </div>
+                <p-dialog [(visible)]="transportWalkerDialog" header="Add Transport Walker" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="750" height="500">
+                    <form [formGroup]="walkerform" (ngSubmit)="createTransportWalker(walkerform.value)" style="height:600px;">
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Patron :
+                                </div>
+                                <div class="ui-grid-col-15">
+                                    <button type="button" pButton style="float:left;width:90px" icon="fa-user-plus" (click)="openSearchBox()" label="Select"></button>
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <strong style="font-size:15px;">{{transportWalkingRequest.patronId}}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Pick  :
+                                </div>
+                                <div class="ui-grid-col-9">
+                                    <p-checkbox name="pick" value="pick" formControlName="pick" binary="true" [(ngModel)]="transportWalkingRequest.pick"></p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin:10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Drop :
+                                </div>
+                                <div class="ui-gri-col-9">
+                                    <p-checkbox name="drop" value="drop" formControlName="drop" binary="true" [(ngModel)]="transportWalkingRequest.drop"></p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Request Date :
+                                </div>
+                                <div class="ui-grid-col-3">
+                                    <p-calendar dateFormat="yy-mm-dd" [monthNavigator]="true" [yearNavigator]="true" formControlName="requestDate" yearRange="{{selectedYear}}:2030" [showIcon]="true" [(ngModel)]="transportWalkingRequest.requestDate"></p-calendar>
+                                    <div style="color:brown" *ngIf="!walkerform.controls['requestDate'].valid&&walkerform.controls['requestDate'].dirty">
+                                        Request date is required
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Request Mode  :
+                                </div>
+                                <div class="ui-grid-col-9">
+                                    <p-dropdown [options]="requestModeList" placeholder="Select" [style]="{'width':'150px','float':'left'}" formControlName="requestModeList" [(ngModel)]="selectedMode"> </p-dropdown>
+                                    <div style="color:brown" *ngIf="!walkerform.controls['requestModeList'].valid&&walkerform.controls['requestModeList'].dirty">
+                                        Request mode is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Request By  :
+                                </div>
+                                <div class="ui-grid-col-9">
+                                    <p-dropdown [options]="requestByList" formControlName="requestByList" [style]="{'width':'150px'}" [(ngModel)]="selectedRequestBy"></p-dropdown>
+                                    <div style="color:brown" *ngIf="!walkerform.controls['requestByList'].valid&&walkerform.controls['requestByList'].dirty">
+                                        Request by is required
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-3">
+                                    Comment :
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <textarea pInputText type="text" placeholder="Required" formControlName="description" autoResize="autoResize" [(ngModel)]="transportWalkingRequest.description"></textarea>
+                                    <div style="color:brown" *ngIf="!walkerform.controls['description'].valid&&walkerform.controls['description'].dirty">
+                                        <span *ngIf="walkerform.controls['description'].errors['required']">Comment is required</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <footer style="margin-left:184px;">
+                            <div>
+                                <button type="button" style="float:initial;width:110px;height:30px;" label="Cancel" pButton (click)="onCancel($event)"></button>
+                                <button pButton type="submit" style="width:110px;height:30px;" label="Save" [disabled]="!walkerform.valid"></button>
+                            </div>
+                        </footer>
+                    </form>
+                </p-dialog>
+
+                <p-dialog header="Patron List" [(visible)]="patronMapDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="750" height="600">
+                    <p-toolbar [style]="{'margin_left':'9px','margin_right':'10px'}">                     
+                            <div class="ui-toolbar-group-left">
+                                <div>
+                                    <button type="button" pButton style="float:left;width:80px" (click)="mapPatron(selectedPatronDetail)" label="Add" pTooltip="MapPatron" tooltipPosition="top"></button>
+                                    <button type="button" label="Cancel" style="float:left;width:80px" pButton (click)="onSearchCancel($event)"></button>
+                                </div>
+
+                                <div class="ui-toolbar-group-right">
+                                    <i class="fa fa-search" style="float:left;margin:4px 4px 0 0"></i>
+                                    <input #gbb type="text" pInputText size="30" style="float:left;margin-right:4px;" placeholder="search">
+                                </div>
+                            </div>                       
+                    </p-toolbar>
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="padding:4px 10px;border-bottom: 0 none;margin-right: -10px;margin-left: -9px;margin-top:-1px;">
+                        <div class="ui-grid-row" style="margin-top: -1px;">
+                            <p-dataTable #dt [(value)]="patronDetails" [(selection)]="selectedPatronDetail" [rows]="8" [paginator]="true" [pageLinks]="3" [responsive]="true" [globalFilter]="gbb">
+                                <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+                                <p-column field="imgUrl" [style]="{'width':'77px'}">
+                                    <ng-template let-col let-car="rowData" pTemplate="body">
+                                        <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="firstName" header="First Name" [sortable]="true"></p-column>
+                                <p-column field="lastName" header="Last Name" [sortable]="true"></p-column>
+                                <p-column field="rollNo" header="Roll No" [sortable]="true"></p-column>
+                                <p-column field="class" header="Class" [sortable]="true"></p-column>
+                                <p-column field="section" header="Section" [sortable]="true"></p-column>
+                            </p-dataTable>
+                        </div>
+                      </div>
+                </p-dialog>
+
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

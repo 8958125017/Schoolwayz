@@ -1,0 +1,381 @@
+﻿<div class="card card-w-title">
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addSession()" label="Add"  pTooltip="Add Session" tooltipPosition="top" ></button>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Session</header>
+        </div>
+    </div>
+    <p-dataList [value]="sessionDetails" class="ui-grid" Width="10px" >
+        <ng-template let-sessionDetail pTemplate type="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="font-size:15px;padding:20px;border-bottom:1px solid #D5D5D5;">
+                <div class="ui-grid-col-8">
+                    <div class="ui-grid-col-4">
+                        <b>{{sessionDetail.sessionName}}</b>
+                    </div>
+                    <div class="ui-grid-col-2">
+                        {{sessionDetail.startDate | date: 'yyyy-MM-dd'}}
+                    </div>
+                    <div class="ui-grid-col-1">
+                        <b>- to -</b>
+                    </div>
+                    <div class="ui-grid-col-3">
+                        {{sessionDetail.endDate | date: 'yyyy-MM-dd'}}
+                    </div>
+                </div>
+                <div class="ui-grid-col-1">
+                    <div style="margin:3%">
+                    <button type="button" pButton icon="fa-pencil-square-o" style="width:83px;" (click)="updateSession(sessionDetail)" label="Edit" pTooltip="Edit Session" tooltipPosition="top"></button></div>
+                </div>
+                <div class="ui-grid-col-1">
+                    <div style="margin:3%">
+                        <button type="button" pButton icon="fa-trash"  style=" width:95px;margin-left:10px;"(click)="deleteSession(sessionDetail)" label="Delete" pTooltip="Delete Session" tooltipPosition="top"  ></button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataList>
+
+    
+    <br>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addTerm()" label="Add" pTooltip="Add Term" tooltipPosition="top"></button>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Term</header>
+        </div>
+    </div>
+    <p-dataList [value]="termDetails" class="ui-grid" Width="10px">
+        <ng-template let-termDetail pTemplate type="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="font-size:15px;padding:20px;border-bottom:1px solid #D5D5D5;">
+                <div class="ui-grid-col-8">
+                    <div class="ui-grid-col-4">
+                        <b>{{termDetail.termName}}</b>
+                    </div>
+                    <div class="ui-grid-col-2">
+                        {{termDetail.startDate | date: 'yyyy-MM-dd'}}
+                    </div>
+                    <div class="ui-grid-col-1">
+                        <b> - to -</b>
+                    </div>
+                    <div class="ui-grid-col-3">
+                        {{termDetail.endDate | date: 'yyyy-MM-dd'}}
+                    </div>
+                </div>
+                <div class="ui-grid-col-1">
+                    <div style="margin:3%"><button type="button" pButton icon="fa-pencil-square-o" style="float:left;width:83px;" (click)="updateTerm(termDetail)" label="Edit" pTooltip="Edit Term" tooltipPosition="top"></button></div>
+                </div>
+
+                <div class="ui-grid-col-1">
+
+                    <div style="margin:3%"><button type="button" pButton icon="fa-trash" style="float:left; width:95px;margin-left:10px;" (click)="deleteTerm(termDetail)" label="Delete" pTooltip="Delete Term" tooltipPosition="top"></button></div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataList>
+    
+
+    <br>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addBreak()" label="Add" pTooltip="Add Break" tooltipPosition="top"></button>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Break</header>
+        </div>
+    </div>
+    <p-dataList [value]="breakDetails" class="ui-grid" Width="10px">
+        <ng-template let-breakDetail pTemplate type="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="font-size:15px;padding:20px;border-bottom:1px solid #D5D5D5;">
+                <div class="ui-grid-col-8">
+                    <div class="ui-grid-col-4">
+                        <b>{{breakDetail.breakName}}</b>
+                    </div>
+                    <div class="ui-grid-col-2">
+                        {{breakDetail.startDate| date: 'yyyy-MM-dd' }}
+                    </div>
+                    <div class="ui-grid-col-1">
+                        <b> - to -</b>
+                    </div>
+                    <div class="ui-grid-col-3">
+                        {{breakDetail.endDate| date: 'yyyy-MM-dd'}}
+                    </div>
+                </div>
+                <div class="ui-grid-col-1">
+                    <div style="margin:3%"><button type="button" pButton icon="fa-pencil-square-o" style="float:left;width:83px;" (click)="updateBreak(breakDetail)" label="Edit" pTooltip="Edit Break" tooltipPosition="top"></button></div>
+                </div>
+                <div class="ui-grid-col-1">
+
+                    <div style="margin:3%">
+                        <button type="button" pButton icon="fa-trash" style="float:left; width:95px;margin-left:10px;" (click)="deleteBreak(breakDetail)" label="Delete" pTooltip="Delete Break" tooltipPosition="top"></button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+    </p-dataList>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Days of Week</header>
+        </div>
+    </div>
+    <p-toolbar>
+        <div class="ui-g-12 ui-lg-10">
+            <p-selectButton [options]="days" [(ngModel)]="selectedDays" multiple="multiple"></p-selectButton> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" label="Save" pTooltip="Save days" tooltipPosition="top"  pButton (click)="createWeek()"></button>
+        </div>
+       
+    </p-toolbar>
+   
+    <br>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addGrade()" label="Add" pTooltip="Add Grade" tooltipPosition="top" ></button>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">List of Classes</header>
+        </div>
+    </div>
+    <p-dataGrid [value]="gradeDetails" >
+        <ng-template let-gradeDetail pTemplate type="body">
+            <div class="ui-g-24 ui-md-3">
+                <div class="grade-detail">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2">
+                            {{gradeDetail.grade}} - {{gradeDetail.section}}
+                        </div>
+                        <div class="ui-grid-col">
+                            <i class="fa fa-trash" (click)="deleteGrade(gradeDetail)" style="cursor:pointer"></i>
+                        </div>
+                    </div>                 
+                  
+                </div>
+            </div>
+        </ng-template>
+        
+    </p-dataGrid>
+    
+    </div>
+    <!--session form-->
+
+    <p-dialog [(visible)]="sessionDialog" header="Session" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="500" height="320">
+        <form [formGroup]="sessionform" (ngSubmit)="createSession(sessionform.value)"	style="height:600px;">
+          
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Name :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <!--<p-inputMask mask="9999-9999" formControlName="sessionname"  [(ngModel)]="sessionDetail.sessionName" placeholder="yyyy-yyyy"></p-inputMask>-->
+                        <input pInputText type="text" formControlName="sessionname" placeholder="Required" [(ngModel)]="sessionDetail.sessionName" />
+                        <div style="color:brown" *ngIf="!sessionform.controls['sessionname'].valid&&sessionform.controls['sessionname'].dirty">
+                            <!--<i class="fa fa-close"></i>-->
+                            <span *ngIf="sessionform.controls['sessionname'].errors['required']"> Session is required</span>
+                            <span *ngIf="sessionform.controls['sessionname'].errors['pattern']">Session name should be number.</span>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Start Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="startdate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" navigator="true"  dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="sessionDetail.startDate"></p-calendar>
+                        <div style="color:brown" *ngIf="!sessionform.controls['startdate'].valid&&sessionform.controls['startdate'].dirty">
+                            Start date is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        End Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="enddate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="sessionDetail.endDate" 
+                                   ></p-calendar>
+                        <div style="color:brown" *ngIf="sessionform.controls.enddate.touched&&sessionform.hasError('invalidDate')">
+                              End date is required and should not be less than start date .
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+            <footer style="text-align: center; margin-top: 15px; margin-left: -70px;">
+                <div>
+                    <button type="button" style="float:initial;" label="Cancel" pButton (click)="cancelSession($event)"></button>
+                    <button pButton type="submit" label="Save" [disabled]="!sessionform.valid"></button>
+                </div>
+            </footer>
+        </form>
+    </p-dialog>
+    <!--End session form-->
+    <!--Start Term Form-->
+    <p-dialog [(visible)]="termDialog" header="Term" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="500" height="320">
+        <form [formGroup]="termform" (ngSubmit)="createTerm(termform.value)"style="height:600px;">
+           
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Name :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input pInputText type="text" formControlName="termname" placeholder="Required" [(ngModel)]="termDetail.termName" />
+                        <div style="color:brown" *ngIf="!termform.controls['termname'].valid&&termform.controls['termname'].dirty">
+                           Term name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Start Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="startdate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="termDetail.startDate"></p-calendar>
+                        <div style="color:brown" *ngIf="!termform.controls['startdate'].valid&&termform.controls['startdate'].dirty">
+                            Start date is required
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        End Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="enddate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="termDetail.endDate"></p-calendar>
+                        <div style="color:brown" *ngIf="termform.controls.enddate.touched&&termform.hasError('invalidDate')">
+                            End date is required and should not be less than start date.
+                        </div>
+                        <!--<p-calendar formControlName="enddate" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="termDetail.endDate"></p-calendar>
+                        <div style="color:brown" *ngIf="!termform.controls['enddate'].valid&&termform.controls['enddate'].dirty">
+                            end date date is required
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+            <footer style="text-align: center; margin-top: 15px; margin-left: -70px;">
+                <div>                   
+                    <button type="button" style="float:initial;" label="Cancel" pButton (click)="cancelTerm($event)"></button>
+                    <button pButton type="submit" label="Save" [disabled]="!termform.valid"></button>
+                </div>
+            </footer>
+        </form>
+    </p-dialog>
+    <!--end term form-->
+    <!-- break form-->
+    <p-dialog [(visible)]="breakDialog" header="Break" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="500" height="320">
+        <form [formGroup]="breakform" (ngSubmit)="createBreak(breakform.value)"style="height:600px;">
+           
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Name :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input pInputText type="text" formControlName="breakname" placeholder="Required" [(ngModel)]="breakDetail.breakName" />
+                        <div style="color:brown" *ngIf="!breakform.controls['breakname'].valid&&breakform.controls['breakname'].dirty">
+                             Break name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Start Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="startdate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="breakDetail.startDate"></p-calendar>
+                        <div style="color:brown" *ngIf="!breakform.controls['startdate'].valid&&breakform.controls['startdate'].dirty">
+                            Start date is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        End Date :
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="enddate" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="breakDetail.endDate"></p-calendar>
+                        <div style="color:brown" *ngIf="breakform.controls.enddate.touched&&breakform.hasError('invalidDate')">
+                            End date is required and should not be less than start date.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer style="text-align: center; margin-top: 15px; margin-left: -70px;">
+                <div>                  
+                    <button type="button" style="float:initial;" label="Cancel" pButton (click)="cancelBreak($event)"></button>
+                    <button pButton type="submit" label="Save" [disabled]="!breakform.valid"></button>
+                </div>
+            </footer>
+        </form>
+    </p-dialog>
+    <!--End Break Form-->
+
+    <!--Start Grade form-->
+    <p-dialog [(visible)]="gradeDialog" header="Grade" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="260" height="250">
+        <form [formGroup]="gradeform" (ngSubmit)="createGrade(gradeform.value)" style="height:400px;">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4">
+                        Class :
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-dropdown [options]="grade" placeholder="Select Class" [style]="{'width':'120px','float':'left'}" formControlName="grade" [(ngModel)]="selectedGrade"> </p-dropdown>
+                        <div style="color:brown" *ngIf="!gradeform.controls['grade'].valid&&gradeform.controls['grade'].dirty">
+                            Class is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4">
+                        Section :
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-dropdown [options]="section" placeholder="Select Section" [style]="{'width':'120px','float':'left'}" formControlName="section" [(ngModel)]="selectedSection"> </p-dropdown>
+                        <div style="color:brown" *ngIf="!gradeform.controls['section'].valid&&gradeform.controls['section'].dirty">                       
+                            Section is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer style="margin-left: 35px; margin-top: 20px;">
+                <div>
+                    <button type="button" label="Cancel" pButton (click)="cancelgrade($event)"></button>
+                    <button pButton type="submit" label="Save" [disabled]="!gradeform.valid"></button>
+                </div>
+            </footer>
+        </form>
+    </p-dialog>
+    <!--end grade form-->
+
+
+    <p-growl [value]="msgs"></p-growl>
+    <p-confirmDialog width="425"></p-confirmDialog>

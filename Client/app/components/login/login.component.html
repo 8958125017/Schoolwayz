@@ -1,0 +1,50 @@
+﻿
+<form [formGroup]="loginform" (ngSubmit)="login(loginform.value)">
+    <p-panel header="Login " [style]="{'margin-top':'20px'}">
+        <div hidden="hidden"><input id="id" class="form-control" formControlName="loginid" type="text" placeholder="id" [(ngModel)]="adminCredential.id" /></div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    UserId :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="userId" placeholder="Required" [(ngModel)]="adminCredential.userId" />
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!loginform.controls['userId'].valid&&loginform.controls['userId'].dirty">
+                        <i class="fa fa-close"></i>
+                        UserId is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Password :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="password" formControlName="password" placeholder="Required" [(ngModel)]="adminCredential.password" />
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!loginform.controls['password'].valid&&loginform.controls['password'].dirty">
+                        <i class="fa fa-close"></i>
+                        Password is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        
+        <h4 style="color:red">{{ status }}</h4>
+        <div>
+            <button pButton type="submit" label="Login" [disabled]="!loginform.valid"></button>
+            <span class="form-links"><a class="forgot-pass-link" href="#forgotPass">Forgot Password?</a></span>
+
+        </div><br>
+    </p-panel>
+</form>
+
+<p-growl [value]="msgs" sticky="sticky"></p-growl>

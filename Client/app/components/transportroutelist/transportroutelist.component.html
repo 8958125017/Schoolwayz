@@ -1,0 +1,454 @@
+
+<div class="card card-w-title">
+    <p-toolbar>
+        <div class="ui-toolbar-group-left">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="addTransportRoute()" label="Add" pTooltip="Add Transport Route" tooltipPosition="top" ></button>
+        </div>
+        <div class="ui-toolbar-group-right">
+            <input #gb type="text" pInputText size="30" style="float:right" placeholder="search">
+            <i class="fa fa-search" style="float:right;margin:4px 4px 0 0"></i>
+        </div>
+    </p-toolbar>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:-1px">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Transport Route</header>
+        </div>
+    </div>
+
+    <p-dataTable [value]="transportRouteDetails" [(selection)]="selectedTranportRoute" (onRowSelect)="onRowSelect($event)" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,15,20]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+        <p-column [style]="{'width':'60px'}" header="Action">
+            <ng-template let-transportRouteDetail="rowData" pTemplate type="body">
+                <button type="button" pButton (click)="updateTransportRoute(transportRouteDetail)" icon="fa-pencil-square-o" pTooltip="Edit Transport Route" tooltipPosition="top"></button>
+                <button type="button" pButton (click)="deleteTransportRoute(transportRouteDetail)" icon="fa-trash" pTooltip="Delete Transport Route" tooltipPosition="top"></button>
+                <button type="button" pButton (click)="addStoppage(transportRouteDetail)" icon="fa-flag-o" pTooltip="Add Transport Stoppage" tooltipPosition="top"></button>
+            </ng-template>
+        </p-column>
+        <p-column field="routeNumber" header="Route No" [style]="{'width':'40px'}"></p-column>
+        <p-column field="registrationNumber" header="Registration" [style]="{'width':'60px'}"></p-column>
+        <p-column field="driverImage" [style]="{'width':'28px'}">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+            </ng-template>
+        </p-column>
+        <p-column field="driverName" header="Driver" [style]="{'width':'70px'}"></p-column>
+        <p-column field="coordinatorImage" [style]="{'width':'32px'}">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+            </ng-template>
+        </p-column>
+        <p-column field="coordinatorName" header="Coordinator" [style]="{'width':'70px'}"></p-column>
+        <p-column field="routeStaffImage" [style]="{'width':'32px'}">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+            </ng-template>
+        </p-column>
+        <p-column field="routeStaffName" header="Route Staff" [style]="{'width':'76px'}"></p-column>
+        <p-column field="description" header="Description" [style]="{'width':'100px'}"></p-column>
+    </p-dataTable>
+</div>
+<!--dialog for add transport route-->
+
+<p-dialog [(visible)]="transportRouteDialog" header="Transport Route" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="800" height="500">   
+    <form [formGroup]="transportForm" (ngSubmit)="createTransportRoute(transportForm.value)" style="height:600px;">
+        <div hidden="hidden"><input id="id" formControlName="transportid" class="form-control" type="text" placeholder="id" [(ngModel)]="transportRouteDetail.id" /></div>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Route Number :
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="routeNumber" placeholder="Required" [(ngModel)]="transportRouteDetail.routeNumber" />
+                   
+                </div>
+                <div class="ui-grid-col-4">
+                    <div style="color:brown" *ngIf="!transportForm.controls['routeNumber'].valid&&transportForm.controls['routeNumber'].dirty">
+                        <span *ngIf="transportForm.controls['routeNumber'].errors['pattern']">Route number should be number</span>
+                        <span *ngIf="transportForm.controls['routeNumber'].errors['required']"> Route number is required</span>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Registration Number :
+                </div>
+
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="registrationNumber" placeholder="Required" [(ngModel)]="transportRouteDetail.registrationNumber" />                   
+                </div>
+                <div class="ui-grid-col-4">
+                    <div style="color:brown" *ngIf="!transportForm.controls['registrationNumber'].valid&&transportForm.controls['registrationNumber'].dirty">
+                        Registration number is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Driver Name :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="driverList" formControlName="driverList" (onChange)="checkDriver($event)" [style]="{'width':'180px'}" [(ngModel)]="selectedDriver" placeholder="Driver">
+                        <ng-template let-driver pTemplate="body">
+                            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                <div style="font-size:14px;float:right;margin-top:4px">{{driver.label}}</div>                                
+                             <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{driver.value.imgUrl}}"  class="rounded-circle" style="width:25px;height:25px;position:absolute;top:1px;left:5px;float:right" />
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div style="color:brown" *ngIf="!transportForm.controls['driverList'].valid&&transportForm.controls['driverList'].dirty">
+                        Driver is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Coordinator :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="coordinatorList" formControlName="coordinatorList" (onChange)="checkDriver($event)" [style]="{'width':'180px'}"  [(ngModel)]="selectedCoordinator" placeholder="Coordinator">
+ 
+                        <ng-template let-coordinator pTemplate="body">
+                            <div class="ui-helper-clearfix" style="position: relative; height: 25px;">
+                                <div style="font-size:14px;float:right;margin-top:4px">{{coordinator.label}}</div>
+                                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{coordinator.value.imgUrl}}" class="rounded-circle" style="width:25px;height:25px;position:absolute;top:1px;left:5px;float:right" />
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                                  
+                </div>
+                <div class="ui-grid-col-4">
+                    <div style="color:brown" *ngIf="!transportForm.controls['coordinatorList'].valid&&transportForm.controls['coordinatorList'].dirty">
+                        Coordinator is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Route Staff :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="routeStaffList" formControlName="routeStaffList" (onChange)="checkDriver($event)" [style]="{'width':'180px'}" [(ngModel)]="selectedRouteStaff" placeholder="Teacher">
+                        <ng-template let-routeStaff pTemplate="body">
+                            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                <div style="font-size:14px;float:right;margin-top:4px">{{routeStaff.label}}</div>
+                                <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{routeStaff.value.imgUrl}}" class="rounded-circle" style="width:25px;height:25px;position:absolute;top:1px;left:5px;float:right" />
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                                 
+                </div>
+                <div class="ui-grid-col-4">
+                    <div style="color:brown" *ngIf="!transportForm.controls['routeStaffList'].valid&&transportForm.controls['routeStaffList'].dirty">
+                        Route Staff is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Description :
+                </div>
+                <div class="ui-grid-col-6">
+                    <textarea pInputText type="text" formControlName="description" placeholder="Required" autoResize="autoResize" [(ngModel)]="transportRouteDetail.description"></textarea>
+                </div>
+                <div class="ui-grid-col-3">
+                    <div style="color:brown" *ngIf="!transportForm.controls['description'].valid&&transportForm.controls['description'].dirty">
+                        Description is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-3">
+                    Remark :
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText type="text"  formControlName="remarks" [(ngModel)]="transportRouteDetail.remarks" />
+                   
+                </div>
+            </div>
+        </div>
+        <footer style="margin-left: 195px;">
+                    <div>
+                        <button type="button" label="Cancel" style="float:initial;width:110px;height:30px;"pButton (click)="onCancel($event)"></button>
+                        <button pButton type="submit" style="width:110px;height:30px"label="Save" [disabled]="!transportForm.valid"></button>
+                    </div>
+        </footer>
+    </form>
+</p-dialog>
+
+<!--dialog for map patron with transport route-->
+
+<p-dialog header="Stoppage" [(visible)]="stoppageDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="1200" height="620">
+
+    <p-tabView (onChange)="handleChange($event)">
+        <p-tabPanel header="List" [selected]="selectedTab===1" *ngIf="tab1stoppage" [style]="{'margin-right':'12px'}">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px; margin-right:12px;margin-left:-20px;margin-top:-8px;">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-6">
+                        <p-toolbar>
+                            <div class="ui-toolbar-group-left">
+                                <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="activateTab(0,'add')" label="Add" pTooltip="Add Stoppage" tooltipPosition="top" ></button>
+                                <button type="button" pButton style="float:left;width:80px" icon="fa-pencil-square-o" (click)="activateTab(0,'edit')" label="Edit" pTooltip="Edit Stoppage" tooltipPosition="top"></button>
+                                <button type="button" pButton style="float:left;width:80px" icon="fa-plus" (click)="openSearchBox(selectedStoppage)" label="Map" pTooltip="Map Patron" tooltipPosition="top"></button>
+                            </div>
+
+                            <div class="ui-toolbar-group-right">
+                                <button type="button" pButton style="float:right;width:40px" icon="fa fa-chevron-down" (click)="moveDown()" pTooltip="MoveDown" tooltipPosition="top"></button>
+                                <button type="button" pButton style="float:left;width:85px;padding-left: 10px;" icon="fa-trash" (click)="deleteStoppage(selectedStoppage)" label="Delete" pTooltip="Delete Stoppage" tooltipPosition="top" ></button>
+                                <button type="button" pButton style="float:right;width:40px" icon="fa fa-chevron-up" (click)="moveUp()" pTooltip="MoveUP" tooltipPosition="top"></button>
+                            </div>
+                        </p-toolbar>
+
+                        <p-toolbar [style]="{'margin-top':'-1px'}">
+                            <div class="ui-toolbar-group-left">
+                            <span style="font-size:120%"> Stop List</span>
+                            </div>
+
+                            <div class="ui-toolbar-group-right">
+                                <button type="button" style="float:right;width:90px;padding-left: 12px;" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top" (click)="stoppageDownload()"></button>
+                            </div>
+                        </p-toolbar>
+                        <!--<div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;width:500px;margin-top:-1px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-10">
+                                    <header style="text-align:left;font-size:120%">
+                                        Stop List
+                                    </header>
+                                </div>
+                                <div class="ui-grid-col-2">
+                                    <button type="button" style="float:right;width:90px;padding-left: 12px;" pButton icon="fa-file-o" iconPos="left" label="Export" data-toggle="tooltip" data-placement="right" title="Download" (click)="stoppageDownload()"></button>
+                                </div>
+                            </div>
+                        </div>-->
+                   
+                        <p-dataTable #dt [(value)]="selectedRouteStoppage" sortField="sequence" sortOrder="1" selectionMode="single" (onRowSelect)="updateStoppage($event)" [(selection)]="selectedStoppage" [rows]="8" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" [responsive]="true"[style]="{'width':'514px','margin-top':'-1px'}"> 
+                            <p-column field="sequence" [style]="{'width':'33px'}" header="No."></p-column>
+                            <p-column field="name" header="Name" [style]="{'width':'100px'}"></p-column>
+                            <p-column field="pickupTime" header="Pick Time" [style]="{'width':'80px'}"></p-column>
+                            <p-column field="dropTime" header="Drop Time" [style]="{'width':'80px'}"></p-column>
+
+                        </p-dataTable>
+                       
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-toolbar>
+                            <div class="ui-toolbar-group-left">
+                                <button type="button" pButton style="float:left;width:80px;padding-left:10px;" icon="fa-trash" (click)="removePatron(selectedRoutePatron,selectedStoppage)" label="Remove" pTooltip="Remove Patron" tooltipPosition="top"></button>
+                            </div>
+
+                            <div class="ui-toolbar-group-right">
+                                <button type="button" style="float:right;width: 90px;padding-left: 12px;" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top"  (click)="studentDownload()"></button>
+                            </div>
+                        </p-toolbar>
+                        <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;width:620px;margin-top:-1px">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-10">
+                                    <header style="text-align:left;font-size:120%">
+                                        Student List
+                                    </header>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <p-dataTable [(value)]="patronWithStoppageList" selectionMode="single" [(selection)]="selectedRoutePatron" [rows]="7" [paginator]="true" [pageLinks]="3" [responsive]="true">
+                            <p-column field="imgUrl" [style]="{'width':'55px'}">
+                                <ng-template let-col let-car="rowData" pTemplate="body">
+                                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                                </ng-template>
+                            </p-column>
+                            <p-column field="patron.firstName" header="First Name" [style]="{'width':'110px'}"></p-column>
+                            <p-column field="patron.lastName" header="Last Name" [style]="{'width':'110px'}"></p-column>
+                            <p-column field="patron.class" header="Class" [style]="{'width':'70px'}"></p-column>
+                            <p-column field="patron.section" header="Section" [style]="{'width':'60px'}"></p-column>
+                            <!--<p-column field="stoppageName" header="Stop" ></p-column>-->                            
+                        </p-dataTable>                       
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="{{stoppageHeader}}" [selected]="selectedTab===0" *ngIf="tab2stoppage">
+           
+                <form [formGroup]="stoppageForm" (ngSubmit)="createTransportStoppage(1)" style="margin-top:-20px">
+               
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-4" style="margin-left:-16px;margin-bottom:-25px" >
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Name :
+                                    </div>
+                                    <div class="ui-grid-col-6">
+                                        <input pInputText type="text" formControlName="name" style="width: 180px;" placeholder="Required" [(ngModel)]="transportStoppageDetail.name" />
+                                        <div style="color:brown" *ngIf="!stoppageForm.controls['name'].valid&&stoppageForm.controls['name'].dirty">
+                                             Name is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Sequence :
+                                    </div>
+                                    <div class="ui-grid-col-6">
+                                        <p-dropdown [options]="seqList" formControlName="seqList" [style]="{'width':'150px','float':'left'}" [(ngModel)]="selectedSequence" placeholder="Select"> </p-dropdown> 
+                                        <div style="color:brown" *ngIf="!stoppageForm.controls['seqList'].valid&&stoppageForm.controls['seqList'].dirty">
+                                            Sequence is required
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Lattitude :
+                                    </div>
+                                    <div class="ui-grid-col-8">
+                                        <input pInputText type="text" readonly="readonly"  formControlName="lattitude" placeholder="Required" [(ngModel)]="transportStoppageDetail.lattitude" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Longitude :
+                                    </div>
+                                    <div class="ui-grid-col-8">
+                                        <input pInputText type="text" formControlName="longitude" readonly="readonly" placeholder="Required" [(ngModel)]="transportStoppageDetail.longitude" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Pick Time :
+                                    </div>
+                                    <div class="ui-grid-col-6">
+                                        <p-calendar [timeOnly]="true" formControlName="pickupTime" placeholder="hh:mm" hourFormat="24" [(ngModel)]="transportStoppageDetail.pickupTime"></p-calendar>
+                                        <div style="color:brown" *ngIf="!stoppageForm.controls['pickupTime'].valid&&stoppageForm.controls['pickupTime'].dirty">
+                                            Pick Time is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Drop Time :
+                                    </div>
+                                    <div class="ui-grid-col-6">
+                                        <p-calendar [timeOnly]="true" formControlName="dropTime" placeholder="hh:mm" hourFormat="24" [(ngModel)]="transportStoppageDetail.dropTime"></p-calendar>
+                                        <div style="color:brown" *ngIf="!stoppageForm.controls['dropTime'].valid&&stoppageForm.controls['dropTime'].dirty">
+                                            Pick Time is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4">
+                                        Description:
+                                    </div>
+                                    <div class="ui-grid-col-8">
+                                        <textarea pInputText type="text" style="width: 240px;" formControlName="description" resizable="false" [(ngModel)]="transportStoppageDetail.description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-left:123px;">
+                                <button type="button" style="float:left;width:90px;" label="Cancel" pButton (click)="cancelTransportStoppage(1)"></button>
+                                <button pButton type="submit" style="float:left;width:90px;margin-left:7px;" label="Save" [disabled]="!stoppageForm.valid"></button>                                                          
+                            </div>
+                        </div>
+                        <div class="ui-grid-col-12" style="margin-right:-25px;margin-bottom:-41px">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-12">
+                                        <div *ngIf="mapVisible">Pick a Location from Map<br>
+                                            <sebm-google-map [latitude]="lat1" [longitude]="lng2" [zoom]="zoom" [disableDefaultUI]="false" 
+                                                             [zoomControl]="false" (mapClick)="handleMapClick($event)">                                                
+                                            <sebm-google-map-marker *ngFor="let m of orgMarkers; let i = index" 
+                                                            (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat"[longitude]="m.lng" [title]="m.title" 
+                                                            [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)" [iconUrl]="m.icon">
+                                                </sebm-google-map-marker>
+                                                <sebm-google-map-marker *ngFor="let m of selectLocation; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label" [title]="m.title" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)" [iconUrl]="m.icon">
+                                                </sebm-google-map-marker>
+                                            </sebm-google-map>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    </form>
+           
+        </p-tabPanel>
+
+    </p-tabView>
+</p-dialog>
+
+<p-dialog header="Add Patron" [(visible)]="patronMapDialog" [resizable]="false" [responsive]="true" showEffect="fade" [modal]="true" width="800" height="620">
+ <p-toolbar [style]="{'margin_left':'9px','margin_right':'10px'}">
+        <div class="ui-toolbar-group-left">
+            <button type="button" pButton style="float:left;width:80px" (click)="mapPatron(selectedPatronDetail,selectedStoppage)" label="Add" pTooltip="Map Patron" tooltipPosition="top"></button>
+            <button type="button" label="Cancel" style="float:left;width:80px" pButton (click)="onSearchCancel($event)"></button>
+        </div>
+        <div class="ui-toolbar-group-right">
+            <i class="fa fa-search" style="float:left;margin:4px 4px 0 0"></i>
+            <input #gbb type="text" pInputText size="30" style="float:left;margin-right:4px;" placeholder="search">
+                <p-toggleButton [(ngModel)]="checked" onLabel="Unmapped" (onChange)="unmappedPatron($event)" offLabel="All" [style]="{'width':'90px','height':'27px'}"></p-toggleButton>
+            <button type="button" style="float:right;margin-left:1px" pButton icon="fa-file-o" iconPos="left" label="Export" pTooltip="Download" tooltipPosition="top" (click)="download()"></button>
+        </div>
+  </p-toolbar>
+
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="padding:4px 10px;border-bottom: 0 none;margin-right: -10px;margin-left: -9px;margin-top:-1px;">
+        <div class="ui-grid-row" style="margin-top: -1px;">
+            <p-dataTable #dt [(value)]="patronDetails" [(selection)]="selectedPatronDetail" [rows]="9" [paginator]="true" [pageLinks]="3" [responsive]="true" [globalFilter]="gbb">
+                <p-column [style]="{'width':'20px'}" selectionMode="single"></p-column>
+                <p-column field="imgUrl" [style]="{'width':'31px'}">
+                    <ng-template let-col let-car="rowData" pTemplate="body">
+                        <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{car[col.field]}}" class="rounded-circle" height="40" width="40" />
+                    </ng-template>
+                </p-column>
+                <p-column field="firstName" header="First Name" [style]="{'width':'75px'}" [sortable]="true"></p-column>
+                <p-column field="lastName" header="Last Name" [style]="{'width':'75px'}" [sortable]="true"></p-column>
+                <!--<p-column field="rollNo" header="Roll No" [sortable]="true" [style]="{'width':'75px'}"></p-column>-->
+                <p-column field="class" header="Class" [sortable]="true" [style]="{'width':'42px'}"></p-column>routeNumber
+                <p-column field="section" header="Section" [sortable]="true" [style]="{'width':'54px'}"></p-column>
+                <!--<p-column field="routeNumber" header="Route" [sortable]="true" [style]="{'width':'45px'}"></p-column>
+                <p-column field="stoppagename" header="Stoppage" [sortable]="true" [style]="{'width':'85px'}"></p-column>-->
+            </p-dataTable>
+        </div>
+    </div>
+</p-dialog>
+
+<!--Confirm dialog delete-->
+
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

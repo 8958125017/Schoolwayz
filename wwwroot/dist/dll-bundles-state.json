@@ -1,0 +1,70 @@
+{
+  "core-js": {
+    "bundle": "polyfills",
+    "version": "2.4.1"
+  },
+  "zone.js": {
+    "bundle": "polyfills",
+    "version": "0.8.9"
+  },
+  "@angular/animations": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/platform-browser": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/platform-browser-dynamic": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/core": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/common": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/forms": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/http": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "@angular/router": {
+    "bundle": "vendor",
+    "version": "4.1.0"
+  },
+  "rxjs": {
+    "bundle": "vendor",
+    "version": "5.3.0"
+  },
+  "angular2-jwt": {
+    "bundle": "vendor",
+    "version": "0.2.2"
+  },
+  "@ngrx/core": {
+    "bundle": "vendor",
+    "version": "1.2.0"
+  },
+  "@ngrx/store": {
+    "bundle": "vendor",
+    "version": "2.2.2"
+  },
+  "@ngrx/store-devtools": {
+    "bundle": "vendor",
+    "version": "3.2.4"
+  },
+  "@ngx-translate/core": {
+    "bundle": "vendor",
+    "version": "6.0.1"
+  },
+  "@ng-bootstrap/ng-bootstrap": {
+    "bundle": "vendor",
+    "version": "1.0.0-alpha.25"
+  }
+}

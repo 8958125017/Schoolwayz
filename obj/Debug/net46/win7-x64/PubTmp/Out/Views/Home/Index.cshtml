@@ -1,0 +1,69 @@
+<style>
+    div.app-spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+    }
+</style>
+<script type="text/javascript" language="Javascript">
+
+    // Access the ViewData
+    //var AuthToken = ('@ViewData["AuthToken"]');
+    //var ContainerUri = ('@ViewData["ContainerUri"]');
+    //var ContainerSasToken = ('@ViewData["ContainerSasToken"]');
+    var OrganizationId = ('@ViewData["OrganizationId"]');
+    var ObjectIdentifier = ('@ViewData["ObjectIdentifier"]');
+    var SurName = ('@ViewData["SurName"]');
+    var GivenName = ('@ViewData["GivenName"]');
+    var ImgUrl = ('@ViewData["ImgUrl"]');
+    var LogoUrl =('@ViewData["LogoUrl"]');
+    var LastLogin = ('@ViewData["LastLogin"]');
+    var UserId = ('@ViewData["UserId"]');
+    // store the ViewData in session storage
+    //sessionStorage.setItem("AuthToken", AuthToken);
+    //sessionStorage.setItem("ContainerUri", ContainerUri);
+    //sessionStorage.setItem("ContainerSasToken", ContainerSasToken);
+    localStorage.setItem("OrganizationId", OrganizationId);
+    localStorage.setItem("ObjectIdentifier", ObjectIdentifier);
+    localStorage.setItem("SurName", SurName);
+    localStorage.setItem("GivenName", GivenName);
+    localStorage.setItem("ImgUrl", ImgUrl);
+    localStorage.setItem("LogoUrl", LogoUrl);
+    localStorage.setItem("LastLogin", LastLogin);
+    localStorage.setItem("UserId", UserId);
+</script>
+<app-root>
+    <div class="splash-screen">
+        <div class="splash-wrapper">
+            <div class="splash-logo"><img src="~/assets/layout/images/schoolwayz.png"></div>
+            <div class="splash-loading"><img src="assets/layout/images/dots.svg"></div>
+        </div>
+    </div>
+
+</app-root>
+<!--
+<div class="container">
+    <appc-root>
+        <div class="app-spinner">
+            <i class="fa fa-spinner fa-spin fa-5x" aria-hidden="true"></i>
+        </div>
+    </appc-root>
+</div>
+    -->
+<script>
+    window.user = '@ViewBag.user';
+</script>
+<script src="~/dist/vendor.js" asp-append-version="true"></script>
+<environment names="Development">
+    <script src="~/dist/polyfills.dll.js" asp-append-version="true"></script>
+    <script src="~/dist/vendor.dll.js" asp-append-version="true"></script>
+    <script src="vis/dist/vis.js"></script>
+</environment>
+<script src="~/dist/main-client.js" asp-append-version="true"></script>
+<script src="~/dist/@ViewBag.MainDotJs" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.css" rel="stylesheet" type="text/css" />
+<link href="vis/dist/vis.css" rel="stylesheet" type="text/css" />

@@ -1,0 +1,244 @@
+﻿<!-- div for set update button -->
+<div class="card card-w-title">
+    <p-toolbar>
+        <div class="ui-toolbar-group-left">
+            <button type="submit" label="Update" pTooltip="Update Organization" tooltipPosition="top" 
+                    [disabled]="!organizationForm.valid" (click)="updateOrganization(organizationForm.value)" pButton></button>
+        </div>
+    </p-toolbar>
+    <div style="margin-top:-1px">
+        <!-- start panel for organization-->
+        <p-panel header="{{organizationHeader}}">
+            <form [formGroup]="organizationForm">
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 50px;">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            Name :
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <input pInputText type="text" formControlName="name" [(ngModel)]="organizationDetail.name" />
+                            <div style="color:brown" *ngIf="!organizationForm.controls['name'].valid&&organizationForm.controls['name'].dirty">
+                                <span *ngIf="organizationForm.controls['name'].errors['required']">Organization name is required.</span>
+                                <span *ngIf="organizationForm.controls['name'].errors['pattern']">Organization name should be characters.</span>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid-col-2" style="margin-left:50px;">
+                            Organization Plan :
+                        </div>
+                        <div class="ui-grid-col-4">
+                            <p-radioButton name="plan" formControlName="plan" [disabled]="!silver" value="silver" label="Silver" [(ngModel)]="selectedValue"></p-radioButton>
+                            <p-radioButton name="plan" formControlName="plan1" [disabled]="!gold" value="gold" label="Gold" [(ngModel)]="selectedValue"></p-radioButton>
+                            <p-radioButton name="plan" formControlName="plan2" [disabled]="!platinum" value="platinum" label="Platinum" [(ngModel)]="selectedValue"></p-radioButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 50px;">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            Address :
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <textarea pInputText type="text" formControlName="address" placeholder="Required" autoResize="autoResize" [(ngModel)]="organizationDetail.address"></textarea>
+                            <div style="color:brown" *ngIf="!organizationForm.controls['address'].valid&&organizationForm.controls['address'].dirty">
+                                Address is Required.
+                            </div>
+                        </div>
+                        <div class="ui-grid-col-2" style="margin-left:50px;">
+                            Establishment Type :
+                        </div>
+                        <div class="ui-grid-col-4">
+                            <p-radioButton name="establishmentType" formControlName="establishmentType" [disabled]="!school" value="school" label="School" [(ngModel)]="selectedType"></p-radioButton>
+                            <p-radioButton name="establishmentType" formControlName="establishmentType" [disabled]="!office" value="office" label="Office" [(ngModel)]="selectedType"></p-radioButton>
+                            <p-radioButton name="establishmentType" formControlName="establishmentType" [disabled]="!Shop" value="shop" label="Shop" [(ngModel)]="selectedType"></p-radioButton>
+                            <p-radioButton name="establishmentType" formControlName="establishmentType" [disabled]="!hospital" value="hospital" label="Hospital" [(ngModel)]="selectedType"></p-radioButton>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 50px;">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            City :
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <input pInputText type="text" formControlName="city" [(ngModel)]="organizationDetail.city" />
+                            <div style="color:brown" *ngIf="!organizationForm.controls['city'].valid&&organizationForm.controls['city'].dirty">
+                                City is Required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 50px;">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            Zip Code :
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <input pInputText type="text" formControlName="zipCode" [(ngModel)]="organizationDetail.zipCode" />
+                            <div style="color:brown" *ngIf="!organizationForm.controls['zipCode'].valid&&organizationForm.controls['zipCode'].dirty">
+                                <span *ngIf="organizationForm.controls['zipCode'].errors['pattern']">Postal Code should be Number</span>
+                                <span *ngIf="!organizationForm.controls['zipCode'].errors['pattern']&&organizationForm.controls['zipCode'].errors['minlength']"> Code should not be less than 3 </span>
+                                <span *ngIf="!organizationForm.controls['zipCode'].errors['pattern']&&organizationForm.controls['zipCode'].errors['maxlength']"> Code should not be grater than 8</span>
+                                <span *ngIf="organizationForm.controls['zipCode'].errors['required']">Postal code is Required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 50px;">
+                    <div class="ui-grid-row">
+
+                        <div class="ui-grid-col-1">
+                            Logo :
+                        </div>
+
+                        <div class="ui-grid-col-3">
+                            <input #fileInput type="file" class="form-control" name="imgUrl" />
+
+                        </div>
+
+                        <div class="ui-grid-col-2">
+                            <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{organizationDetail.logoURL}}" height="50" width="210" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            </div>
+            <p-accordion>
+                <!--Start Notification setting-->
+
+                <p-accordionTab header="Notification Setting" [selected]="true">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 38px;">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForWhenTransportReachedStop" value="notifyParentForWhenTransportReachedStop" binary="true" [(ngModel)]="notifications.notifyParentForWhenTransportReachedStop"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Notify or send notifications to the parents when transport reached at Stop" tooltipPosition="top">
+                                Transport Reached At Stop
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForWhenTransportReachedSchool" value="notifyParentForWhenTransportReachedSchool" binary="true" [(ngModel)]="notifications.notifyParentForWhenTransportReachedSchool"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-4" pTooltip="Notify or send notification to the parents when transport reached at School" tooltipPosition="top">
+                                Transport Reached At School
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 38px;">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForPatronReachedSchool" value="notifyParentForPatronReachedSchool" binary="true" [(ngModel)]="notifications.notifyParentForPatronReachedSchool"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Notify or send notification to the parents when their kids reached at School" tooltipPosition="top">
+                                Patron Reached At School
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForPatronLeftSchool" value="notifyParentForPatronLeftSchool" binary="true" [(ngModel)]="notifications.notifyParentForPatronLeftSchool"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-4" pTooltip="Notify or send notification to the parents when their kids Leave The School" tooltipPosition="top" >
+                                Patron Left From School
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 38px;">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForPatronAbsent" value="notifyParentForPatronAbsent" binary="true" [(ngModel)]="notifications.notifyParentForPatronAbsent"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Notify or send notification to the parents when their kids are Absent" tooltipPosition="top">
+                                Patron Absent
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForPatronAbscond" value="notifyParentForPatronAbscond" binary="true" [(ngModel)]="notifications.notifyParentForPatronAbscond"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-4" pTooltip="Notify or send Notification to the parents when their kids Absconded From School" tooltipPosition="top" >
+                                Patron Absconded
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px;margin-left: 38px;">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="notifyParentForWhenTransportLeftSchool" value="notifyParentForWhenTransportLeftSchool" binary="true" [(ngModel)]="notifications.notifyParentForWhenTransportLeftSchool"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Notify or send notification to the parents when transport left from School" tooltipPosition="top">
+                                Transport Left From School
+                            </div>
+
+
+                        </div>
+                    </div>
+                </p-accordionTab>
+                <!--End Notification setting-->
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                </div>
+                <!--Start Organization setting-->
+                <p-accordionTab header="Organization Setting">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px; margin-left: 38px;">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="trackHalfSession" value="trackHalfSession" binary="true" [(ngModel)]="settings.trackHalfSession"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Track the attendance session wise" tooltipPosition="top" >
+                                Track Half Session
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="trackPeriods" value="trackPeriods" binary="true" [(ngModel)]="settings.trackPeriods"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-4" pTooltip="Track The Attendance Period Wise" tooltipPosition="top"  >
+                                Track Periods
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px; margin-left: 38px;">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="trackSchoolEnd" value="trackSchoolEnd" binary="true" [(ngModel)]="settings.trackSchoolEnd"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-5" pTooltip="Track the attendance just before school end time" tooltipPosition="top">
+                                Track School End
+                            </div>
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="trackTransportStopDrop" value="trackTransportStopDrop" binary="true" [(ngModel)]="settings.trackTransportStopDrop"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col-4" pTooltip="Attendance For the transport Route" tooltipPosition="top" >
+                                Track Transport Pick/Drop
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px; margin-left: 38px;">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <p-checkbox name="enableSMSNotificaions" value="enableSMSNotificaions" binary="true" [(ngModel)]="settings.enableSMSNotificaions"></p-checkbox>
+                            </div>
+                            <div class="ui-grid-col--5" pTooltip="Send Text Messages to the Parents" tooltipPosition="top"  >
+                                Enable SMS Notifications
+                            </div>
+                        </div>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+            <!--End Organization setting-->
+
+        </p-panel>
+    </div>
+</div>
+
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-growl [value]="msgs" life="3000"></p-growl>

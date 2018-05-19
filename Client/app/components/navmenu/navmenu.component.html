@@ -1,0 +1,141 @@
+<div class='main-nav'>
+    <div class='navbar navbar-inverse'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' [routerLink]="['/home']">SchoolWayz</a>
+        </div>
+        <div class='clearfix'></div>
+        <div class='navbar-collapse collapse'>
+            <ul class='navbar'>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/login']">
+                        <span class='glyphicon glyphicon-home'></span> Login
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']" >
+                    <a [routerLink]="['/home']">
+                        <span class='glyphicon glyphicon-home'></span> Home
+                    </a>
+                </li>
+                
+                
+                <li >
+                    <a [routerLink]>
+                        <span class='glyphicon glyphicon-plus-sign'></span>Analytics
+                    </a>
+                    <ul>
+                        <li [routerLinkActive]="['link-active']">
+                            <a [routerLink]="['/chart']">
+                                <span class='fa fa-circle'></span> Patron
+                            </a>
+                            <i class="mega-octicon octicon-organization"></i>
+                            <a [routerLink]="['/personchart']">
+                                <span class='fa fa-circle'></span> Employee
+                            </a>
+                            
+                            <a [routerLink]="['/eventtracking']">
+                                <span class='fa fa-circle'></span> Event
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li [routerLinkActive]="['link-active']" >
+                    <a [routerLink]="['/eventlist']">
+                        <span class='glyphicon glyphicon-tasks'></span> Event
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']" >
+                    <a [routerLink]="['/transportwalker']">
+                        <span class="fa fa-circle"></span> Walking Request
+                    </a>
+                </li>
+
+                <li [routerLinkActive]="['link-active']" >
+                    <a [routerLink]="['/mapview']">
+                        <span class='glyphicon glyphicon-map-marker'></span>Map
+                    </a>
+                </li>
+                <!--  <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/inhousemessage']">
+                        <span class='glyphicon glyphicon-envelope'></span>Message Center
+                    </a>
+                </li>
+              
+                <li>
+                    <a [routerLink]><span class='glyphicon glyphicon-plus-sign'></span>Message </a>
+                    <ul>
+                        <li [routerLinkActive]="['link-active']">
+                            <a [routerLink]="['/incomingmessage']">
+                                <span class="glyphicon glyphicon-inbox"></span> Inbox
+                            </a>
+                            <a [routerLink]="['/outgoingmessage']">
+                                <span class="glyphicon glyphicon-send"></span> Outbox
+                            </a>
+                            
+                            <a [routerLink]="['/draftmessage']">
+                                <span class="glyphicon glyphicon-save"></span> Draft
+                            </a>
+                        </li>
+                    </ul>
+                </li>-->
+                <li>
+                    <a [routerLink]><span class='glyphicon glyphicon-envelope'></span>Message Center </a>
+                    <ul>
+                        <li [routerLinkActive]="['link-active']">
+                            <a [routerLink]="['/inhousemessage']">
+                                <span class="glyphicon glyphicon-send"></span> Internal Message
+                            </a>
+                            <a [routerLink]><span class='glyphicon glyphicon-plus-sign'></span>External Message </a>
+                            <ul>
+                                <li [routerLinkActive]="['link-active']">
+                                    <a [routerLink]="['/incomingmessage']">
+                                        <span class="glyphicon glyphicon-inbox"></span> Inbox
+                                    </a>
+                                    <a [routerLink]="['/outgoingmessage']">
+                                        <span class="glyphicon glyphicon-send"></span> Outbox
+                                    </a>
+                                    <a [routerLink]="['/draftmessage']">
+                                        <span class="glyphicon glyphicon-save"></span> Draft
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a [routerLink]>
+                        <span class='glyphicon glyphicon-cog'></span>Setup
+                    </a>
+                    <ul>
+                        <li [routerLinkActive]="['link-active']">
+                            <a [routerLink]="['/organization']">
+                                <span class="glyphicon glyphicon-calendar"></span> organization
+                            </a>
+                            <a [routerLink]="['/schedule']">
+                                <span class="glyphicon glyphicon-calendar"></span> Schedule
+                            </a>
+
+                            <a [routerLink]="['/patronlist']">
+                                <span class="glyphicon glyphicon-education"></span> Patron
+                            </a>
+
+                            <a [routerLink]="['/personlist']">
+                                <span class='glyphicon glyphicon-user'></span> Employee
+                            </a>
+
+                            <a [routerLink]="['/transportroutelist']">
+                                <span class='glyphicon glyphicon-road'></span>Transport
+                            </a>
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

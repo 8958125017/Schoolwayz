@@ -1,0 +1,119 @@
+﻿<div class="card card-w-title">
+    
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none;margin-top:20px">
+        <div class="ui-grid-row">
+            <div>
+                <button type="button" pButton icon="fa-inbox" style="float:left" (click)="createMessage()" label="Add" data-toggle="tooltip" data-placement="right" title="Create Message"></button>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid ui-grid-responsive   ui-widget-header ui-helper-clearfix" style="padding:4px 10px;border-bottom: 0 none">
+        <div class="ui-grid-row">
+            <header style="text-align:left;font-size:120%">Message List(s)</header>
+        </div>
+    </div>
+    <p-dataTable #dt [(value)]="messageCenterDetails" selectionMode="single"(onRowSelect)="confirm($event)" [(selection)]="selectedMessageDetail" expandableRows="true" [rows]="15" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+        
+        <p-column field="message" header="Message" [style]="{'width':'175px'}"></p-column>
+        <p-column field="messageDate" header="Create Date" [style]="{'width':'40px'}"></p-column>
+        <p-column field="expiryDate" header="Expiry Date" [style]="{'width':'40px'}"></p-column>
+        
+    </p-dataTable>
+</div>
+<p-dialog header="Message Center" [(visible)]="messageCenterDialog" [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="700" height="500">
+    
+        
+            <div hidden="hidden"><input id="id" class="form-control" type="text" placeholder="id" [(ngModel)]="messageDetail.id" /></div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Broadcast To :
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-dropdown [options]="broadcastTo" [style]="{'width':'150px'}" (onChange)="onSelectMode()" [(ngModel)]="selectedBroadCast"></p-dropdown>
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="showClassSection" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Class :
+                    </div>
+                    <div class="ui-grid-col-2">
+                        <p-multiSelect [options]="classSectionList" [style]="{'width':'150px'}" [(ngModel)]="selectedClassSection"></p-multiSelect>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showClass" class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Class :
+                    </div>
+                    <div class="ui-grid-col-2">
+                        <p-multiSelect [options]="classList" [style]="{'width':'150px'}" [(ngModel)]="selectedGrade"></p-multiSelect>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-grid-fluid" style="margin:10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Message Category:
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <p-dropdown [options]="messageCategory" [style]="{'width':'150px'}" [(ngModel)]="selectedCategory" maxlength="30"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Expiry Date :
+                    </div>
+                    <div class="ui-grid-col-3">
+                         <!--   <input pInputText type="date" placeholder="Required" [(ngModel)]="messageDetail.expiryDate" />-->
+                    <p-calendar dateFormat="dd/mm/yy" [showIcon]="true" [(ngModel)]="messageDetail.expiryDate"></p-calendar>
+                      
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-grid-fluid" style="margin:10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        Message:
+                    </div>
+                    <div class="ui-grid-col-8">
+                        <textarea rows="5" cols="40" maxlength="100" pInputTextarea [(ngModel)]="messageDetail.message"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col">
+                    </div>
+                    <div>
+                        <button type="button" style="float:initial;" label="Send" pButton (click)="sendMessage()"></button>
+                    </div>
+                    <div>
+                        <button type="button" label="Cancel" pButton (click)="onCancel($event)"></button>
+                    </div>
+                </div>
+            </div>
+</p-dialog>
+
+<p-dialog [(visible)]="displayDialog" header="Acknowledge Detail"  [resizable]="false" [responsive]="true" showeffect="fade" [modal]="true" width="500" height="430">
+    <p-dataTable #dt [(value)]="deviceDetails" selectionMode="single" [rows]="9" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+        <p-column field="receivedBy" header="Recived By" ></p-column>
+        <p-column field="acknowledgeTime" header="Acknowledge Time" ></p-column>
+        <p-column  header="Acknowledge">
+            <ng-template let-deviceDetail="rowData" pTemplate type="body">
+                <p-checkbox name="isAcknowledge"  value="isAcknowledge" binary="true" [(ngModel)]="deviceDetail.isAcknowledge"></p-checkbox>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</p-dialog>
+
+<p-growl [value]="msgs" life="3000"></p-growl>
+<p-confirmDialog width="500"></p-confirmDialog>

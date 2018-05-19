@@ -1,0 +1,61 @@
+<div class="wrapper" [ngClass]="{'sidebar-inactive-l':menuInactiveDesktop, 'sidebar-active-m':menuActiveMobile}">
+    <div class="topbar clearfix">
+        <a id="omega-menu-button" href="#" (click)="toggleMenu($event)">
+            <span class="fa fa-bars"></span>
+        </a>
+        <span class="topbar-title"></span>
+        <a id="options-menu-button" href="#" (click)="toggleTopMenu($event)">
+            <span class="fa fa-ellipsis-h"></span>
+        </a>
+        <a>
+            <span>Last Login</span>              
+        </a> 
+        <div id="topbar-icons" class="animated" [ngClass]="{'topbar-icons-visible flipInX':topMenuActive,'flipOutX':topMenuLeaving}">
+            <!--<span class="topbar-search" (click)="onSearchClick($event)">
+                <input type="text" placeholder="Search" />
+                <span class="topbar-search-icon fa fa-search"></span>
+            <!--</span>
+            <a>
+                <span class="topbar-item-text">Messages</span>
+                <span class="topbar-icon fa fa-envelope-o animated swing"></span>
+                <span class="topbar-badge animated rubberBand">5</span>
+            </a>
+            <!--<a href="#">
+                <a>
+                    <span class="topbar-item-text">Settings</span>
+                    <span class="topbar-icon fa fa-gear"></span>
+                </a>
+            <a href="#">
+                <span class="topbar-item-text">User</span>
+                <span class="topbar-icon fa fa-user"></span>
+            </a>-->
+        </div><br> 
+        &nbsp;&nbsp; {{lastLogin}}
+    </div>
+    <div class="sidebar" (click)="onMenuClick($event)">
+        <div #scroller class="nano">
+            <div class="nano-content sidebar-scroll-content">
+                <div class="logo">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{logoImage}}"height="47" width="80%" />                    
+                </div>
+                <div class="profile">
+                    <img src="https://devschoolwayzdatastorage.blob.core.windows.net/b077007f-6e64-4074-bd2b-c9500d89bef8/Photo/{{image}}" class="rounded-circle" height="56" width="50" />
+                    <a id="profile-button" href="#" (click)="toggleProfile($event)">
+                        <span class="username">{{userName}}</span>                    </a>
+                    <ul [@submenu]="profileActive ? 'visible' : 'hidden'">
+                       <li><a  style="cursor: pointer;" ata-toggle="modal" data-target="#myModal" (click)="password($event)"><i class="fa fa-fw fa-sliders"></i><span>Change Password</span></a></li>
+                        <li><a href="#"><i class="fa fa-fw fa-sign-out"></i><span>Logout</span></a></li>
+                    </ul>
+                    <!--<div [@submenu]="changePasswordForm ? 'visible' : 'hidden'">
+                        asdasdsadas
+                    </div>-->
+                </div>                
+                <app-menu></app-menu>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <router-outlet></router-outlet>
+    </div>
+    
+</div>
